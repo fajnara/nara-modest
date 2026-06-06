@@ -14,7 +14,7 @@ export default function ProductCard({ product, onCardClick, onAddToCart }) {
 
   return (
     <div
-      className="bg-white rounded-2xl overflow-hidden border border-[#E5E5E5] shadow-[0_1px_4px_rgba(0,0,0,0.06)] cursor-pointer active:scale-[0.98] transition-transform duration-100"
+      className="group bg-white rounded-2xl overflow-hidden border border-[#E5E5E5] shadow-[0_1px_4px_rgba(0,0,0,0.06)] cursor-pointer transition-all duration-200 hover:shadow-[0_4px_16px_rgba(139,94,60,0.12)] hover:-translate-y-0.5 active:scale-[0.98]"
       onClick={onCardClick}
     >
       {/* Product Image */}
@@ -23,13 +23,20 @@ export default function ProductCard({ product, onCardClick, onAddToCart }) {
           src={displayImage}
           alt={product.name}
           fill
-          className="object-cover"
+          className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
           sizes="(max-width: 480px) 50vw, 240px"
-          onError={(e) => {
-            e.currentTarget.src = PLACEHOLDER_IMAGE;
-          }}
           unoptimized={displayImage.includes("placehold.co")}
         />
+
+        {/* Featured badge */}
+        {product.isFeatured && product.isAvailable && (
+          <div className="absolute top-2 left-2">
+            <span className="bg-[#8B5E3C] text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide">
+              Baru
+            </span>
+          </div>
+        )}
+
         {!product.isAvailable && (
           <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
             <span className="bg-white/90 text-[#737373] text-[10px] font-semibold px-2 py-1 rounded-full">

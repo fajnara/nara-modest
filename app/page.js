@@ -3,6 +3,10 @@ import { STORE_SETTINGS_QUERY, CATEGORIES_QUERY, PRODUCTS_QUERY } from "@/lib/qu
 import { DUMMY_STORE, DUMMY_CATEGORIES, DUMMY_PRODUCTS } from "@/lib/dummy";
 import AppShell from "@/components/AppShell";
 
+// ISR: revalidate every 60 seconds so Sanity content updates
+// appear on Vercel without needing a manual redeploy
+export const revalidate = 60;
+
 async function getData() {
   if (!isSanityConfigured) {
     return {

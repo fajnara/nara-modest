@@ -8,6 +8,7 @@ import ProductGrid from "./ProductGrid";
 import ProductModal from "./ProductModal";
 import CartDrawer from "./CartDrawer";
 import Footer from "./Footer";
+import ToastContainer, { useToast } from "./Toast";
 
 const CART_STORAGE_KEY = "nara-modest-cart";
 
@@ -17,6 +18,7 @@ export default function AppShell({ store, categories, products }) {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [activeCategory, setActiveCategory] = useState("all");
   const [isHydrated, setIsHydrated] = useState(false);
+  const { toasts, showToast } = useToast();
 
   // Load cart from localStorage on mount
   useEffect(() => {
@@ -60,7 +62,8 @@ export default function AppShell({ store, categories, products }) {
         },
       ];
     });
-  }, []);
+    showToast(`${product.name} ditambahkan ke keranjang`);
+  }, [showToast]);
 
   const increaseQty = useCallback((id) => {
     setCart((prev) =>
@@ -95,6 +98,9 @@ export default function AppShell({ store, categories, products }) {
 
   return (
     <div className="min-h-screen bg-[#F3F0EA] flex items-start justify-center">
+      {/* Toast notifications — portal above everything */}
+      <ToastContainer toasts={toasts} />
+
       <div className="relative w-full max-w-[480px] min-h-screen bg-[#FAFAF8] shadow-[0_0_40px_rgba(0,0,0,0.08)]">
         <Header
           storeName={store.storeName}
