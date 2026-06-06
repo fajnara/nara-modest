@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx create-next-app@latest . --js --tailwind --app --no-src-dir --no-import-alias --eslint)",
+      "Bash(npx create-next-app@latest . --js --tailwind --app --no-src-dir --no-import-alias --eslint --skip-install)",
+      "Bash(mkdir -p \"F:\\\\Code\\\\Nara Modest\\\\app\\\\studio\\\\[[...tool]]\" 2>/dev/null; echo \"done\")",
+      "Bash(npm install *)",
+      "Skill(update-config)",
+      "Skill(update-config:*)",
+      "Bash(git init *)",
+      "Bash(git add *)",
+      "Bash(git commit -m 'feat: initial Nara Modest MVP *)"
+    ]
+  }
+}
