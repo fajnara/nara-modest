@@ -6,12 +6,16 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed": "node --env-file=.env.local scripts/seed.js",
+    "create-admin": "node --env-file=.env.local scripts/create-admin.js"
   },
   "dependencies": {
     "@sanity/image-url": "^1.1.0",
     "@sanity/vision": "^3.88.1",
+    "bcryptjs": "^2.4.3",
     "next": "^15.4.0",
+    "next-auth": "^4.24.11",
     "next-sanity": "^9.8.17",
     "prismjs": "^1.30.0",
     "react": "^19.0.0",

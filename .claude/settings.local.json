@@ -9,7 +9,13 @@
       "Skill(update-config:*)",
       "Bash(git init *)",
       "Bash(git add *)",
-      "Bash(git commit -m 'feat: initial Nara Modest MVP *)"
+      "Bash(git commit -m 'feat: initial Nara Modest MVP *)",
+      "Bash(gh --version)",
+      "Bash(git commit -m 'feat: add ISR revalidation, cart toast feedback, UI polish *)",
+      "Bash(git push *)",
+      "Bash(git commit -m 'feat: add desktop sidebar layout \\(responsive\\) *)",
+      "Bash(git commit -m 'feat: desktop layout full screen, dynamic grid columns *)",
+      "Bash(git commit *)"
     ]
   }
 }
