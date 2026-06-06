@@ -123,7 +123,7 @@ export default function AppShell({ store, categories, products }) {
       </div>
 
       {/* ── DESKTOP layout (≥ md) ────────────────────── */}
-      <div className="hidden md:flex min-h-screen max-w-[1100px] mx-auto bg-[#FAFAF8] shadow-[0_0_60px_rgba(0,0,0,0.07)]">
+      <div className="hidden md:flex min-h-screen w-full bg-[#FAFAF8]">
 
         {/* Sidebar */}
         <DesktopSidebar

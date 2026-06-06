@@ -15,7 +15,7 @@ export default function DesktopSidebar({
   const instagramUrl = store?.instagramUrl || "https://instagram.com/naramodest";
 
   return (
-    <aside className="hidden md:flex flex-col w-[240px] shrink-0 sticky top-0 h-screen overflow-y-auto border-r border-[#E5E5E5] bg-[#FAFAF8] py-6 px-5">
+    <aside className="hidden md:flex flex-col w-[260px] xl:w-[280px] shrink-0 sticky top-0 h-screen overflow-y-auto border-r border-[#E5E5E5] bg-[#FAFAF8] py-6 px-6">
       {/* Brand */}
       <div className="mb-6">
         <h1 className="text-lg font-bold text-[#171717] leading-tight">
