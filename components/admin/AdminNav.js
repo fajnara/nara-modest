@@ -48,15 +48,30 @@ export default function AdminNav({ user }) {
           })}
         </nav>
 
-        <div className="p-4 border-t border-[#E5E5E5]">
-          <p className="text-xs font-semibold text-[#171717] truncate">{user?.name}</p>
-          <p className="text-[10px] text-[#737373] truncate mb-2">{user?.email}</p>
-          <button
-            onClick={() => signOut({ callbackUrl: "/admin/login" })}
-            className="w-full text-left text-xs text-red-500 hover:text-red-700 transition-colors"
+        <div className="p-4 border-t border-[#E5E5E5] space-y-2">
+          {/* Lihat Website */}
+          <Link
+            href="/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 w-full px-3 py-2 rounded-lg bg-[#F3F0EA] text-[#8B5E3C] text-xs font-semibold hover:bg-[#E8E2D9] transition-colors"
           >
-            Keluar
-          </button>
+            <span>🌐</span>
+            <span>Lihat Website</span>
+            <span className="ml-auto text-[10px] opacity-60">↗</span>
+          </Link>
+
+          {/* User info + logout */}
+          <div className="pt-1">
+            <p className="text-xs font-semibold text-[#171717] truncate">{user?.name}</p>
+            <p className="text-[10px] text-[#737373] truncate mb-1.5">{user?.email}</p>
+            <button
+              onClick={() => signOut({ callbackUrl: "/admin/login" })}
+              className="w-full text-left text-xs text-red-500 hover:text-red-700 transition-colors"
+            >
+              Keluar
+            </button>
+          </div>
         </div>
       </aside>
 
@@ -97,6 +112,10 @@ export default function AdminNav({ user }) {
               );
             })}
             <div className="pt-3 mt-3 border-t border-[#E5E5E5]">
+              <Link href="/" target="_blank" onClick={() => setMobileOpen(false)}
+                className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#F3F0EA] text-[#8B5E3C] text-xs font-semibold mb-2">
+                <span>🌐</span> Lihat Website ↗
+              </Link>
               <button
                 onClick={() => signOut({ callbackUrl: "/admin/login" })}
                 className="text-xs text-red-500 px-3"

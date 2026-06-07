@@ -99,19 +99,24 @@ export async function deleteCategory(id) {
 // ── Store Settings ────────────────────────────────────
 
 export async function updateStoreSettings(data) {
-  await adminClient
-    .createOrReplace({
-      _id: "storeSettings-singleton",
-      _type: "storeSettings",
-      storeName: data.storeName,
-      storeTagline: data.storeTagline,
-      whatsappNumber: data.whatsappNumber,
-      instagramUrl: data.instagramUrl,
-      address: data.address,
-      heroTitle: data.heroTitle,
-      heroSubtitle: data.heroSubtitle,
-      promoText: data.promoText,
-    });
+  // Always update whichever document the website reads first
+  const existingId = await adminClient.fetch(
+    `*[_type == "storeSettings"][0]._id`
+  );
+  const docId = existingId || "storeSettings-singleton";
+
+  await adminClient.createOrReplace({
+    _id: docId,
+    _type: "storeSettings",
+    storeName: data.storeName,
+    storeTagline: data.storeTagline,
+    whatsappNumber: data.whatsappNumber,
+    instagramUrl: data.instagramUrl,
+    address: data.address,
+    heroTitle: data.heroTitle,
+    heroSubtitle: data.heroSubtitle,
+    promoText: data.promoText,
+  });
 
   revalidatePath("/");
   revalidatePath("/admin/settings");

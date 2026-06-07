@@ -42,9 +42,18 @@ export default function Footer({ store }) {
         </div>
       </div>
 
-      <p className="text-center text-[10px] text-[#A8A29E]">
-        © {new Date().getFullYear()} {storeName}. All rights reserved.
-      </p>
+      <div className="flex items-center justify-center gap-3 mt-1">
+        <p className="text-[10px] text-[#A8A29E]">
+          © {new Date().getFullYear()} {storeName}. All rights reserved.
+        </p>
+        <span className="text-[#E5E5E5]">·</span>
+        <a
+          href="/admin"
+          className="text-[10px] text-[#D4C4B8] hover:text-[#8B5E3C] transition-colors"
+        >
+          Admin
+        </a>
+      </div>
     </footer>
   );
 }
