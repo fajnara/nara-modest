@@ -185,7 +185,7 @@ export default function AppShell({ store, categories, products }) {
             />
 
             {/* Browsing panel — search + category in one card */}
-            <div id="products" className="px-4 mt-5">
+            <div id="products" className="px-4 mt-5 scroll-mt-20">
               <div className="bg-white rounded-2xl border border-[#E5E5E5] p-3 space-y-3 shadow-sm">
                 <SearchBar value={searchQuery} onChange={setSearchQuery} />
                 <CategoryChips
@@ -196,7 +196,19 @@ export default function AppShell({ store, categories, products }) {
               </div>
             </div>
 
-            <div className="px-4 pb-6">
+            <div className="px-4 pt-5 pb-6">
+              {/* Editorial section heading */}
+              <div className="mb-1 flex items-baseline justify-between gap-3">
+                <h2 className="text-base font-bold text-[#171717]">
+                  {activeCategory === "all"
+                    ? "Koleksi Pilihan"
+                    : categories.find((c) => c.slug === activeCategory)?.title || "Koleksi"}
+                </h2>
+                <p className="text-[10px] text-[#737373]">
+                  {filteredProducts.length} produk
+                </p>
+              </div>
+
               <ProductGrid
                 products={filteredProducts}
                 onProductClick={setSelectedProduct}
@@ -247,7 +259,7 @@ export default function AppShell({ store, categories, products }) {
           </div>
 
           {/* Hero — editorial variant for desktop */}
-          <div id="products" className="px-6 pt-5">
+          <div className="px-6 pt-5">
             <HeroBanner
               heroTitle={store.heroTitle}
               heroSubtitle={store.heroSubtitle}
@@ -259,7 +271,19 @@ export default function AppShell({ store, categories, products }) {
           </div>
 
           {/* Product grid — 3 columns on desktop */}
-          <div className="px-6 pt-4 pb-8 flex-1">
+          <div id="products" className="px-6 pt-6 pb-8 flex-1 scroll-mt-20">
+            {/* Editorial section heading */}
+            <div className="mb-2 flex items-baseline justify-between gap-3">
+              <h2 className="text-lg font-bold text-[#171717]">
+                {activeCategory === "all"
+                  ? "Koleksi Pilihan"
+                  : categories.find((c) => c.slug === activeCategory)?.title || "Koleksi"}
+              </h2>
+              <p className="text-xs text-[#737373]">
+                {filteredProducts.length} produk{searchQuery && ` · "${searchQuery}"`}
+              </p>
+            </div>
+
             <ProductGrid
               products={filteredProducts}
               onProductClick={setSelectedProduct}

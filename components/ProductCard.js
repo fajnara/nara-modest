@@ -47,11 +47,11 @@ export default function ProductCard({ product, onCardClick, onAddToCart }) {
           )}
         </div>
 
-        {/* Quick-add button — bottom-right, larger touch target */}
+        {/* Quick-add button — always visible on mobile, hover-reveal on desktop */}
         <button
           onClick={onAddToCart}
           disabled={!product.isAvailable}
-          className="absolute bottom-3 right-3 w-10 h-10 flex items-center justify-center rounded-full btn-brand shadow-md disabled:opacity-40 disabled:cursor-not-allowed active:scale-90 transition-all opacity-0 group-hover:opacity-100 sm:opacity-100"
+          className="absolute bottom-3 right-3 w-10 h-10 flex items-center justify-center rounded-full btn-brand shadow-md disabled:opacity-40 disabled:cursor-not-allowed active:scale-90 transition-all md:opacity-0 md:group-hover:opacity-100"
           aria-label={`Tambah ${product.name} ke keranjang`}
         >
           <Plus className="w-4 h-4" />
