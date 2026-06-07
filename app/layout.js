@@ -1,9 +1,19 @@
 import "./globals.css";
 import { cache } from "react";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import { sanityClient, isSanityConfigured } from "@/lib/sanity";
 import { STORE_SETTINGS_QUERY } from "@/lib/queries";
 import { DUMMY_STORE } from "@/lib/dummy";
 import { getImageUrl } from "@/lib/image";
+
+// Self-hosted font via next/font — no render-blocking external CSS request.
+// Next.js inlines the font CSS and uses preload hints automatically.
+const plusJakartaSans = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+  variable: "--font-sans",
+});
 
 // React cache() dedupes identical calls within a single render
 // (e.g., generateMetadata + generateViewport + RootLayout all calling getStore
@@ -64,8 +74,8 @@ export async function generateViewport() {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="id">
-      <body className="bg-[#F3F0EA] min-h-screen">
+    <html lang="id" className={plusJakartaSans.variable}>
+      <body className="bg-[#F3F0EA] min-h-screen font-sans">
         {children}
       </body>
     </html>

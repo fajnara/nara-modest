@@ -2,6 +2,21 @@
 
 All notable changes to this template.
 
+## [1.5.0] — 2026-06 — Performance Optimization
+
+### Performance
+- **PRODUCTS_QUERY**: removed `gallery` field — homepage was fetching
+  all gallery images for every product (potentially 6× per product).
+  Saved heavily on initial page payload.
+- **PRODUCT_BY_SLUG_QUERY**: new query for future product detail pages
+  that *do* need full gallery (lazy-loaded, single product only).
+- **ProductCard Image**: `quality={70}` + explicit `loading="lazy"`
+  — smaller image transfers without visible quality loss for thumbs.
+- **Font loading**: migrated from CSS `@import` (render-blocking) to
+  `next/font/google` (self-hosted, preloaded, zero blocking).
+- **Tailwind**: `fontFamily.sans` uses `var(--font-sans)` injected
+  by next/font.
+
 ## [1.4.0] — 2026-06 — Login Rate Limiting
 
 ### Security

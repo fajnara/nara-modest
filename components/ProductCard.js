@@ -29,6 +29,8 @@ export default function ProductCard({ product, onCardClick, onAddToCart }) {
           fill
           className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
           sizes="(max-width: 480px) 50vw, 240px"
+          quality={70}
+          loading="lazy"
           unoptimized={displayImage.includes("placehold.co")}
         />
 

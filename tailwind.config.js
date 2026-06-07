@@ -19,7 +19,7 @@ module.exports = {
         whatsapp: "#25D366",
       },
       fontFamily: {
-        sans: ["Plus Jakarta Sans", "system-ui", "sans-serif"],
+        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
       },
       maxWidth: {
         app: "480px",
