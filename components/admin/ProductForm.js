@@ -14,11 +14,23 @@ export default function ProductForm({ product, categories, action }) {
     setError("");
 
     const formData = new FormData(e.target);
+
+    // Split comma-separated lists into arrays
+    const parseList = (str) =>
+      (str || "")
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+
     const data = {
       name: formData.get("name"),
       categoryId: formData.get("categoryId"),
       price: formData.get("price"),
+      discountPrice: formData.get("discountPrice"),
       description: formData.get("description"),
+      material: formData.get("material"),
+      colors: parseList(formData.get("colors")),
+      sizes: parseList(formData.get("sizes")),
       isAvailable: formData.get("isAvailable") === "on",
       isFeatured: formData.get("isFeatured") === "on",
       sortOrder: formData.get("sortOrder"),
@@ -59,13 +71,21 @@ export default function ProductForm({ product, categories, action }) {
         </select>
       </div>
 
-      <div>
-        <label className="block text-xs font-semibold text-[#171717] mb-1.5">
-          Harga (Rp) <span className="text-red-500">*</span>
-        </label>
-        <input name="price" type="number" defaultValue={product?.price} required min="0"
-          placeholder="75000"
-          className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-[#8B5E3C] text-sm outline-none bg-white" />
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className="block text-xs font-semibold text-[#171717] mb-1.5">
+            Harga (Rp) <span className="text-red-500">*</span>
+          </label>
+          <input name="price" type="number" defaultValue={product?.price} required min="0"
+            placeholder="75000"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-[#8B5E3C] text-sm outline-none bg-white" />
+        </div>
+        <div>
+          <label className="block text-xs font-semibold text-[#171717] mb-1.5">Harga Diskon (Rp)</label>
+          <input name="discountPrice" type="number" defaultValue={product?.discountPrice ?? ""} min="0"
+            placeholder="Opsional"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-[#8B5E3C] text-sm outline-none bg-white" />
+        </div>
       </div>
 
       <div>
@@ -73,6 +93,29 @@ export default function ProductForm({ product, categories, action }) {
         <textarea name="description" defaultValue={product?.description} rows={4}
           placeholder="Deskripsi produk..."
           className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-[#8B5E3C] text-sm outline-none bg-white resize-none" />
+      </div>
+
+      <div>
+        <label className="block text-xs font-semibold text-[#171717] mb-1.5">Bahan / Material</label>
+        <input name="material" defaultValue={product?.material || ""}
+          placeholder="Contoh: Voal Premium, Crepe, Linen"
+          className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-[#8B5E3C] text-sm outline-none bg-white" />
+      </div>
+
+      <div>
+        <label className="block text-xs font-semibold text-[#171717] mb-1.5">Pilihan Warna</label>
+        <input name="colors" defaultValue={(product?.colors || []).join(", ")}
+          placeholder="Pisahkan dengan koma. Contoh: Hitam, Putih, Cream"
+          className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-[#8B5E3C] text-sm outline-none bg-white" />
+        <p className="text-[10px] text-[#A8A29E] mt-1">Kosongkan jika produk tidak punya pilihan warna.</p>
+      </div>
+
+      <div>
+        <label className="block text-xs font-semibold text-[#171717] mb-1.5">Pilihan Ukuran</label>
+        <input name="sizes" defaultValue={(product?.sizes || []).join(", ")}
+          placeholder="Pisahkan dengan koma. Contoh: S, M, L, XL atau All Size"
+          className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-[#8B5E3C] text-sm outline-none bg-white" />
+        <p className="text-[10px] text-[#A8A29E] mt-1">Kosongkan jika produk tidak punya pilihan ukuran.</p>
       </div>
 
       <div>

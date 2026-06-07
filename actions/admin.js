@@ -6,6 +6,24 @@ import bcrypt from "bcryptjs";
 
 // ── Products ──────────────────────────────────────────
 
+function buildProductDoc(data) {
+  return {
+    name: data.name,
+    category: data.categoryId
+      ? { _type: "reference", _ref: data.categoryId }
+      : undefined,
+    price: Number(data.price),
+    discountPrice: data.discountPrice ? Number(data.discountPrice) : undefined,
+    description: data.description || "",
+    material: data.material || "",
+    colors: Array.isArray(data.colors) ? data.colors : [],
+    sizes: Array.isArray(data.sizes) ? data.sizes : [],
+    isAvailable: data.isAvailable === true || data.isAvailable === "true",
+    isFeatured: data.isFeatured === true || data.isFeatured === "true",
+    sortOrder: data.sortOrder ? Number(data.sortOrder) : 99,
+  };
+}
+
 export async function createProduct(data) {
   const slug = data.name
     .toLowerCase()
@@ -14,14 +32,8 @@ export async function createProduct(data) {
 
   await adminClient.create({
     _type: "product",
-    name: data.name,
     slug: { _type: "slug", current: slug },
-    category: data.categoryId ? { _type: "reference", _ref: data.categoryId } : undefined,
-    price: Number(data.price),
-    description: data.description || "",
-    isAvailable: data.isAvailable === true || data.isAvailable === "true",
-    isFeatured: data.isFeatured === true || data.isFeatured === "true",
-    sortOrder: data.sortOrder ? Number(data.sortOrder) : 99,
+    ...buildProductDoc(data),
   });
 
   revalidatePath("/");
@@ -29,18 +41,7 @@ export async function createProduct(data) {
 }
 
 export async function updateProduct(id, data) {
-  await adminClient
-    .patch(id)
-    .set({
-      name: data.name,
-      category: data.categoryId ? { _type: "reference", _ref: data.categoryId } : undefined,
-      price: Number(data.price),
-      description: data.description || "",
-      isAvailable: data.isAvailable === true || data.isAvailable === "true",
-      isFeatured: data.isFeatured === true || data.isFeatured === "true",
-      sortOrder: data.sortOrder ? Number(data.sortOrder) : 99,
-    })
-    .commit();
+  await adminClient.patch(id).set(buildProductDoc(data)).commit();
 
   revalidatePath("/");
   revalidatePath("/admin/products");
@@ -111,11 +112,15 @@ export async function updateStoreSettings(data) {
     storeName: data.storeName,
     storeTagline: data.storeTagline,
     whatsappNumber: data.whatsappNumber,
+    instagramUsername: data.instagramUsername,
     instagramUrl: data.instagramUrl,
     address: data.address,
     heroTitle: data.heroTitle,
     heroSubtitle: data.heroSubtitle,
     promoText: data.promoText,
+    primaryColor: data.primaryColor,
+    seoTitle: data.seoTitle,
+    seoDescription: data.seoDescription,
   });
 
   revalidatePath("/");

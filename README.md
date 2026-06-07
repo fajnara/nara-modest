@@ -157,6 +157,20 @@ Di Sanity manage → API → CORS Origins, tambahkan URL deployment Vercel kamu.
 - [x] Schema Sanity: product, category, storeSettings
 - [x] Image dari Sanity ditampilkan via `@sanity/image-url`
 - [x] Responsive, clean warm design
+- [x] Desktop sidebar layout (>=768px), mobile bottom-sheet (<768px)
+- [x] Admin panel `/admin` dengan NextAuth login (per-user)
+- [x] CRUD lengkap: produk, kategori, store settings, admin users
+- [x] Dynamic branding — semua dari Sanity (no hardcoded)
+- [x] Primary color dari CMS via CSS variable
+- [x] Validasi nomor WhatsApp (format 62xxxxxxxxxx)
+- [x] Disable order CTA jika WA belum dikonfigurasi
+- [x] SEO metadata dinamis dari CMS
+- [x] **Varian produk: warna + ukuran**
+- [x] **Harga diskon dengan badge persentase**
+- [x] **Galeri foto produk (multiple images)**
+- [x] **Search produk real-time**
+- [x] **Cart aware varian (same product + different variant = separate entries)**
+- [x] **Cart auto-sync dengan harga terbaru saat load**
 - [x] `npm run build` berhasil
 
 ---

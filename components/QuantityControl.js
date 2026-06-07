@@ -19,7 +19,7 @@ export default function QuantityControl({ qty, onIncrease, onDecrease }) {
 
       <button
         onClick={onIncrease}
-        className="w-7 h-7 flex items-center justify-center rounded-lg bg-[#8B5E3C] text-white hover:bg-[#5C3A24] transition-colors active:scale-90"
+        className="w-7 h-7 flex items-center justify-center rounded-lg btn-brand transition-colors active:scale-90"
         aria-label="Tambah jumlah"
       >
         <Plus className="w-3 h-3" />

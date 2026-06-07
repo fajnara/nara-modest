@@ -4,7 +4,10 @@ export default function HeroBanner({ heroTitle, heroSubtitle, promoText }) {
   const promo = promoText || "Koleksi baru minggu ini sudah tersedia.";
 
   return (
-    <section className="mx-4 mt-4 rounded-2xl overflow-hidden bg-gradient-to-br from-[#8B5E3C] to-[#5C3A24] px-6 py-8">
+    <section
+      className="mx-4 mt-4 rounded-2xl overflow-hidden px-6 py-8"
+      style={{ background: "linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%)" }}
+    >
       {promo && (
         <div className="inline-flex items-center gap-1.5 bg-white/20 rounded-full px-3 py-1 mb-4">
           <span className="w-1.5 h-1.5 rounded-full bg-[#F3D5B5] animate-pulse" />

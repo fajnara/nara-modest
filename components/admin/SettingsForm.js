@@ -4,13 +4,16 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 const FIELDS = [
-  { name: "storeName",    label: "Nama Toko",           placeholder: "Nara Modest" },
-  { name: "storeTagline", label: "Tagline",              placeholder: "Modest Wear Catalog" },
-  { name: "whatsappNumber", label: "Nomor WhatsApp",     placeholder: "628xxx (tanpa + atau spasi)" },
-  { name: "instagramUrl", label: "URL Instagram",        placeholder: "https://instagram.com/naramodest" },
-  { name: "address",      label: "Alamat / Lokasi",      placeholder: "Sampit, Indonesia" },
-  { name: "heroTitle",    label: "Judul Hero Banner",    placeholder: "Elegan Setiap Hari" },
-  { name: "promoText",    label: "Teks Promo (kecil)",   placeholder: "Koleksi baru minggu ini sudah tersedia." },
+  { name: "storeName",         label: "Nama Toko",            placeholder: "Nara Modest" },
+  { name: "storeTagline",      label: "Tagline",              placeholder: "Modest Wear Catalog" },
+  { name: "whatsappNumber",    label: "Nomor WhatsApp",       placeholder: "628xxx (tanpa + atau spasi)", help: "Format wajib 62xxxxxxxxxx. Contoh: 6281234567890" },
+  { name: "instagramUsername", label: "Username Instagram",   placeholder: "naramodest (tanpa @)" },
+  { name: "instagramUrl",      label: "URL Instagram",        placeholder: "https://instagram.com/naramodest" },
+  { name: "address",           label: "Alamat / Lokasi",      placeholder: "Sampit, Indonesia" },
+  { name: "primaryColor",      label: "Warna Utama (Hex)",    placeholder: "#8B5E3C", help: "Warna tombol & aksen. Contoh: #8B5E3C" },
+  { name: "heroTitle",         label: "Judul Hero Banner",    placeholder: "Elegan Setiap Hari" },
+  { name: "promoText",         label: "Teks Promo (kecil)",   placeholder: "Koleksi baru minggu ini sudah tersedia." },
+  { name: "seoTitle",          label: "SEO Title (Google)",   placeholder: "Kosongkan untuk pakai Nama Toko" },
 ];
 
 export default function SettingsForm({ settings, action }) {
@@ -45,6 +48,7 @@ export default function SettingsForm({ settings, action }) {
           <label className="block text-xs font-semibold text-[#171717] mb-1.5">{f.label}</label>
           <input name={f.name} defaultValue={settings[f.name] || ""} placeholder={f.placeholder}
             className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-[#8B5E3C] text-sm outline-none bg-[#FAFAF8]" />
+          {f.help && <p className="text-[10px] text-[#A8A29E] mt-1">{f.help}</p>}
         </div>
       ))}
 
@@ -52,6 +56,13 @@ export default function SettingsForm({ settings, action }) {
         <label className="block text-xs font-semibold text-[#171717] mb-1.5">Subjudul Hero Banner</label>
         <textarea name="heroSubtitle" defaultValue={settings.heroSubtitle || ""} rows={3}
           placeholder="Belanja koleksi hijab dan modest wear terbaru langsung via WhatsApp."
+          className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-[#8B5E3C] text-sm outline-none bg-[#FAFAF8] resize-none" />
+      </div>
+
+      <div>
+        <label className="block text-xs font-semibold text-[#171717] mb-1.5">SEO Description</label>
+        <textarea name="seoDescription" defaultValue={settings.seoDescription || ""} rows={2}
+          placeholder="Deskripsi singkat untuk Google & media sosial."
           className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-[#8B5E3C] text-sm outline-none bg-[#FAFAF8] resize-none" />
       </div>
 

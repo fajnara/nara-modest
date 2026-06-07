@@ -1,5 +1,4 @@
 import { adminClient } from "@/lib/sanity-admin";
-import { deleteCategory } from "@/actions/admin";
 import CategoryManager from "@/components/admin/CategoryManager";
 
 export default async function CategoriesPage() {

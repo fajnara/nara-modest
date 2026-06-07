@@ -2,22 +2,26 @@
 
 import Image from "next/image";
 import { getImageUrl, PLACEHOLDER_IMAGE } from "@/lib/image";
-import { formatCurrencyShort } from "@/lib/formatCurrency";
+import { formatCurrencyShort, getEffectivePrice, hasDiscount } from "@/lib/formatCurrency";
 import { Plus } from "./icons";
 
 export default function ProductCard({ product, onCardClick, onAddToCart }) {
-  const imageUrl = product.image
-    ? getImageUrl(product.image, 400, 500)
-    : PLACEHOLDER_IMAGE;
-
+  const imageUrl = product.image ? getImageUrl(product.image, 400, 500) : null;
   const displayImage = imageUrl || PLACEHOLDER_IMAGE;
+
+  const effectivePrice = getEffectivePrice(product);
+  const showDiscount = hasDiscount(product);
+  const discountPercent = showDiscount
+    ? Math.round(((product.price - product.discountPrice) / product.price) * 100)
+    : 0;
+
+  const hasVariants = (product.colors?.length || 0) > 0 || (product.sizes?.length || 0) > 0;
 
   return (
     <div
-      className="group bg-white rounded-2xl overflow-hidden border border-[#E5E5E5] shadow-[0_1px_4px_rgba(0,0,0,0.06)] cursor-pointer transition-all duration-200 hover:shadow-[0_4px_16px_rgba(139,94,60,0.12)] hover:-translate-y-0.5 active:scale-[0.98]"
+      className="group bg-white rounded-2xl overflow-hidden border border-[#E5E5E5] shadow-[0_1px_4px_rgba(0,0,0,0.06)] cursor-pointer transition-all duration-200 hover:shadow-[0_4px_16px_rgba(0,0,0,0.1)] hover:-translate-y-0.5 active:scale-[0.98]"
       onClick={onCardClick}
     >
-      {/* Product Image */}
       <div className="relative aspect-[4/5] bg-[#F3F0EA] overflow-hidden">
         <Image
           src={displayImage}
@@ -28,14 +32,19 @@ export default function ProductCard({ product, onCardClick, onAddToCart }) {
           unoptimized={displayImage.includes("placehold.co")}
         />
 
-        {/* Featured badge */}
-        {product.isFeatured && product.isAvailable && (
-          <div className="absolute top-2 left-2">
-            <span className="bg-[#8B5E3C] text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide">
+        {/* Badges */}
+        <div className="absolute top-2 left-2 flex flex-col gap-1">
+          {showDiscount && (
+            <span className="bg-red-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-full">
+              -{discountPercent}%
+            </span>
+          )}
+          {product.isFeatured && product.isAvailable && !showDiscount && (
+            <span className="bg-brand text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide">
               Baru
             </span>
-          </div>
-        )}
+          )}
+        </div>
 
         {!product.isAvailable && (
           <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
@@ -46,10 +55,9 @@ export default function ProductCard({ product, onCardClick, onAddToCart }) {
         )}
       </div>
 
-      {/* Product Info */}
       <div className="p-2.5">
         {product.category?.title && (
-          <span className="text-[10px] font-medium text-[#8B5E3C] bg-[#F3F0EA] px-2 py-0.5 rounded-full">
+          <span className="text-[10px] font-medium text-brand bg-[#F3F0EA] px-2 py-0.5 rounded-full">
             {product.category.title}
           </span>
         )}
@@ -59,15 +67,22 @@ export default function ProductCard({ product, onCardClick, onAddToCart }) {
         </p>
 
         <div className="flex items-center justify-between mt-2 gap-1">
-          <span className="text-sm font-bold text-[#171717]">
-            {formatCurrencyShort(product.price)}
-          </span>
+          <div className="min-w-0">
+            <div className="text-sm font-bold text-[#171717] tabular-nums">
+              {formatCurrencyShort(effectivePrice)}
+            </div>
+            {showDiscount && (
+              <div className="text-[10px] text-[#A8A29E] line-through tabular-nums">
+                {formatCurrencyShort(product.price)}
+              </div>
+            )}
+          </div>
 
           <button
             onClick={onAddToCart}
             disabled={!product.isAvailable}
-            className="flex items-center justify-center w-7 h-7 rounded-lg bg-[#8B5E3C] text-white disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[#5C3A24] transition-colors active:scale-95 flex-shrink-0"
-            aria-label={`Tambah ${product.name} ke keranjang`}
+            className="flex items-center justify-center w-7 h-7 rounded-lg btn-brand disabled:opacity-40 disabled:cursor-not-allowed active:scale-95 flex-shrink-0 transition-colors"
+            aria-label={hasVariants ? `Pilih varian ${product.name}` : `Tambah ${product.name} ke keranjang`}
           >
             <Plus className="w-3.5 h-3.5" />
           </button>

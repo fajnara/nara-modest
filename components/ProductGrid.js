@@ -3,12 +3,41 @@
 import ProductCard from "./ProductCard";
 import EmptyState from "./EmptyState";
 
-export default function ProductGrid({ products, onProductClick, onAddToCart, columns = 2 }) {
+export default function ProductGrid({
+  products,
+  onProductClick,
+  onAddToCart,
+  columns = 2,
+  searchQuery = "",
+  onClearFilters,
+}) {
   if (!products || products.length === 0) {
+    // Distinguish: empty because of search vs empty because of category filter
+    const isSearchEmpty = searchQuery.trim().length > 0;
+
     return (
       <EmptyState
-        title="Belum ada produk di kategori ini"
-        description="Coba pilih kategori lain atau lihat semua produk."
+        icon={isSearchEmpty ? "🔍" : "🛍️"}
+        title={
+          isSearchEmpty
+            ? `Tidak ada hasil untuk "${searchQuery}"`
+            : "Belum ada produk di kategori ini"
+        }
+        description={
+          isSearchEmpty
+            ? "Coba kata kunci lain atau hapus filter."
+            : "Coba pilih kategori lain atau lihat semua produk."
+        }
+        action={
+          onClearFilters && (
+            <button
+              onClick={onClearFilters}
+              className="px-4 py-2 rounded-xl btn-brand text-xs font-semibold transition-colors"
+            >
+              Lihat Semua Produk
+            </button>
+          )
+        }
       />
     );
   }

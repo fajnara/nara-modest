@@ -15,8 +15,8 @@ export default function CategoryChips({ categories, activeCategory, onCategoryCh
             className={`
               flex-shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-150
               ${isActive
-                ? "bg-[#8B5E3C] text-white shadow-sm"
-                : "bg-white text-[#737373] border border-[#E5E5E5] hover:border-[#8B5E3C] hover:text-[#8B5E3C]"
+                ? "btn-brand shadow-sm"
+                : "bg-white text-[#737373] border border-[#E5E5E5] hover:border-[var(--brand)] hover:text-brand"
               }
             `}
           >

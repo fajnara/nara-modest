@@ -1,7 +1,6 @@
 import { adminClient } from "@/lib/sanity-admin";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { deleteAdminUser } from "@/actions/admin";
 import UserManager from "@/components/admin/UserManager";
 
 export default async function UsersPage() {

@@ -24,6 +24,10 @@ export default function CartDrawer({
   const [customerNote, setCustomerNote] = useState("");
   const [nameError, setNameError] = useState("");
 
+  // Validate WhatsApp number — must be 62xxxxxxxxxx
+  const waNumber = (store?.whatsappNumber || "").replace(/\D/g, "");
+  const isWaValid = /^62\d{9,13}$/.test(waNumber);
+
   // Close on Escape
   useEffect(() => {
     if (!isOpen) return;
@@ -47,6 +51,7 @@ export default function CartDrawer({
   }, [isOpen]);
 
   function handleOrder() {
+    if (!isWaValid) return;
     if (!customerName.trim()) {
       setNameError("Nama wajib diisi sebelum pesan");
       return;
@@ -75,7 +80,7 @@ export default function CartDrawer({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center">
+    <div className="fixed inset-0 z-50 flex items-end md:items-stretch justify-center md:justify-end">
       {/* Overlay */}
       <div
         className="absolute inset-0 bg-black/50 backdrop-blur-[2px]"
@@ -83,11 +88,23 @@ export default function CartDrawer({
         aria-hidden="true"
       />
 
-      {/* Drawer */}
-      <div className="relative w-full max-w-[480px] bg-[#FAFAF8] rounded-t-3xl flex flex-col max-h-[85vh] animate-[slideUp_0.3s_cubic-bezier(0.32,0.72,0,1)]">
+      {/*
+        Drawer:
+        - Mobile: bottom sheet (rounded top, slide up from bottom, max-h 85vh)
+        - Desktop: right-side drawer (full height, slide in from right, fixed width)
+      */}
+      <div
+        className={`
+          relative w-full max-w-[480px] bg-[#FAFAF8] flex flex-col
+          rounded-t-3xl max-h-[85vh] animate-[slideUp_0.3s_cubic-bezier(0.32,0.72,0,1)]
+          md:rounded-none md:rounded-l-3xl md:max-h-none md:h-full md:max-w-[420px]
+          md:animate-[slideInRight_0.3s_cubic-bezier(0.32,0.72,0,1)] md:shadow-2xl
+        `}
+      >
         {/* Handle + Header */}
         <div className="px-5 pt-3 pb-3 border-b border-[#E5E5E5] flex-shrink-0">
-          <div className="w-10 h-1 bg-[#E5E5E5] rounded-full mx-auto mb-3" />
+          {/* Drag handle (mobile only) */}
+          <div className="w-10 h-1 bg-[#E5E5E5] rounded-full mx-auto mb-3 md:hidden" />
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-base font-bold text-[#171717]">Keranjang</h2>
@@ -108,11 +125,19 @@ export default function CartDrawer({
         </div>
 
         {isEmpty ? (
-          <div className="flex-1 overflow-y-auto">
+          <div className="flex-1 overflow-y-auto flex items-center justify-center">
             <EmptyState
               title="Keranjang masih kosong"
-              description="Tambahkan produk favoritmu terlebih dahulu."
+              description="Mulai pilih produk favoritmu, lalu pesan langsung via WhatsApp."
               icon="🛒"
+              action={
+                <button
+                  onClick={onClose}
+                  className="px-5 py-2.5 rounded-xl btn-brand text-sm font-semibold transition-colors"
+                >
+                  Mulai Belanja
+                </button>
+              }
             />
           </div>
         ) : (
@@ -121,11 +146,11 @@ export default function CartDrawer({
             <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
               {cart.map((item) => (
                 <CartItem
-                  key={item.id}
+                  key={item.cartKey || item.id}
                   item={item}
-                  onIncrease={() => onIncrease(item.id)}
-                  onDecrease={() => onDecrease(item.id)}
-                  onRemove={() => onRemove(item.id)}
+                  onIncrease={() => onIncrease(item.cartKey || item.id)}
+                  onDecrease={() => onDecrease(item.cartKey || item.id)}
+                  onRemove={() => onRemove(item.cartKey || item.id)}
                 />
               ))}
 
@@ -150,7 +175,7 @@ export default function CartDrawer({
                     className={`w-full px-3.5 py-2.5 rounded-xl border text-sm bg-white placeholder-[#A8A29E] text-[#171717] outline-none transition-colors ${
                       nameError
                         ? "border-red-400 focus:border-red-500"
-                        : "border-[#E5E5E5] focus:border-[#8B5E3C]"
+                        : "border-[#E5E5E5] focus:border-[var(--brand)]"
                     }`}
                   />
                   {nameError && (
@@ -171,7 +196,7 @@ export default function CartDrawer({
                     value={customerNote}
                     onChange={(e) => setCustomerNote(e.target.value)}
                     rows={3}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-[#8B5E3C] text-sm bg-white placeholder-[#A8A29E] text-[#171717] outline-none resize-none transition-colors"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-[var(--brand)] text-sm bg-white placeholder-[#A8A29E] text-[#171717] outline-none resize-none transition-colors"
                   />
                 </div>
               </div>
@@ -186,13 +211,19 @@ export default function CartDrawer({
                 </span>
               </div>
 
+              {!isWaValid && (
+                <div className="px-3 py-2 rounded-lg bg-amber-50 border border-amber-200 text-xs text-amber-800 text-center">
+                  ⚠️ Nomor admin belum dikonfigurasi. Hubungi pemilik toko.
+                </div>
+              )}
+
               <button
                 onClick={handleOrder}
-                disabled={isEmpty}
+                disabled={isEmpty || !isWaValid}
                 className="w-full flex items-center justify-center gap-2.5 py-4 rounded-2xl bg-[#25D366] text-white font-bold text-sm disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[#1ebe5d] transition-colors active:scale-[0.98]"
               >
                 <WhatsAppIcon className="w-5 h-5" />
-                Pesan via WhatsApp
+                {isWaValid ? "Pesan via WhatsApp" : "Order Belum Tersedia"}
               </button>
 
               <p className="text-center text-[10px] text-[#A8A29E]">
@@ -229,7 +260,12 @@ function CartItem({ item, onIncrease, onDecrease, onRemove }) {
       {/* Info + controls */}
       <div className="flex-1 min-w-0">
         <p className="text-xs font-semibold text-[#171717] line-clamp-1">{item.name}</p>
-        <p className="text-xs text-[#8B5E3C] font-medium mt-0.5">
+        {(item.color || item.size) && (
+          <p className="text-[10px] text-[#737373] mt-0.5">
+            {[item.color, item.size].filter(Boolean).join(" · ")}
+          </p>
+        )}
+        <p className="text-xs text-brand font-medium mt-0.5">
           {formatCurrencyShort(item.price)}
         </p>
         <div className="flex items-center justify-between mt-2">

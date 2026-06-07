@@ -6,7 +6,14 @@ import { updateProduct } from "@/actions/admin";
 export default async function EditProductPage({ params }) {
   const { id } = await params;
   const [product, categories] = await Promise.all([
-    adminClient.fetch(`*[_type == "product" && _id == $id][0]`, { id }),
+    adminClient.fetch(
+      `*[_type == "product" && _id == $id][0]{
+        _id, name, price, discountPrice, description, material,
+        colors, sizes, isAvailable, isFeatured, sortOrder,
+        "category": category->{ _id, title }
+      }`,
+      { id }
+    ),
     adminClient.fetch(`*[_type == "category"] | order(order asc) { _id, title }`),
   ]);
 

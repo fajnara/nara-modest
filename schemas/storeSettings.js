@@ -24,11 +24,24 @@ export const storeSettingsSchema = {
       name: "whatsappNumber",
       title: "Nomor WhatsApp (format: 628xxx)",
       type: "string",
-      description: "Tanpa tanda + atau spasi. Contoh: 6281234567890",
+      description: "Wajib format internasional tanpa + atau spasi. Contoh: 6281234567890",
+      validation: (Rule) =>
+        Rule.custom((val) => {
+          if (!val) return true;
+          return /^62\d{9,13}$/.test(val)
+            ? true
+            : "Format harus 62xxxxxxxxxx (tanpa + atau spasi)";
+        }),
+    },
+    {
+      name: "instagramUsername",
+      title: "Username Instagram",
+      type: "string",
+      description: "Tanpa @. Contoh: naramodest",
     },
     {
       name: "instagramUrl",
-      title: "URL Instagram",
+      title: "URL Instagram (lengkap)",
       type: "string",
     },
     {
@@ -56,7 +69,20 @@ export const storeSettingsSchema = {
       name: "primaryColor",
       title: "Warna Utama (hex)",
       type: "string",
-      description: "Contoh: #8B5E3C",
+      description: "Contoh: #8B5E3C — warna tombol, aksen, dll.",
+    },
+    {
+      name: "seoTitle",
+      title: "SEO Title",
+      type: "string",
+      description: "Judul yang muncul di Google. Kosongkan untuk pakai nama toko.",
+    },
+    {
+      name: "seoDescription",
+      title: "SEO Description",
+      type: "text",
+      rows: 2,
+      description: "Deskripsi singkat untuk Google & media sosial.",
     },
   ],
 };
