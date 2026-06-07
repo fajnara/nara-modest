@@ -3,9 +3,9 @@ import { STORE_SETTINGS_QUERY, CATEGORIES_QUERY, PRODUCTS_QUERY } from "@/lib/qu
 import { DUMMY_STORE, DUMMY_CATEGORIES, DUMMY_PRODUCTS } from "@/lib/dummy";
 import AppShell from "@/components/AppShell";
 
-// ISR: revalidate every 60 seconds so Sanity content updates
-// appear on Vercel without needing a manual redeploy
-export const revalidate = 60;
+// Force dynamic so admin panel changes reflect immediately
+// On Vercel, this means no page-level caching (always fresh from Sanity)
+export const dynamic = "force-dynamic";
 
 async function getData() {
   if (!isSanityConfigured) {

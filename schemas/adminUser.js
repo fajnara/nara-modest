@@ -19,8 +19,7 @@ export const adminUserSchema = {
       name: "passwordHash",
       title: "Password Hash",
       type: "string",
-      readOnly: true,
-      description: "Di-generate otomatis. Jangan edit manual.",
+      description: "Paste hasil bcrypt hash di sini.",
     },
     {
       name: "role",
