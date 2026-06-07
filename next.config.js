@@ -1,5 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Hide "X-Powered-By: Next.js" header for slight security obscurity
+  poweredByHeader: false,
+  // Tighter cross-origin policy
+  reactStrictMode: true,
   images: {
     remotePatterns: [
       {
