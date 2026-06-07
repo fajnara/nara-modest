@@ -84,11 +84,14 @@ Tidak ada password default — kamu **wajib** set via environment variable.
 
 ```bash
 # Windows PowerShell
-$env:ADMIN_NAME="Nama Kamu"; $env:ADMIN_EMAIL="admin@toko.com"; $env:ADMIN_PASSWORD="password-yang-aman-min-8-karakter"; $env:ADMIN_ROLE="superadmin"; npm run create-admin
+$env:ADMIN_NAME="Nama Kamu"; $env:ADMIN_EMAIL="admin@toko.com"; $env:ADMIN_PASSWORD="passwordAman123"; $env:ADMIN_ROLE="superadmin"; npm run create-admin
 
 # macOS / Linux
-ADMIN_NAME="Nama Kamu" ADMIN_EMAIL=admin@toko.com ADMIN_PASSWORD="password-aman" ADMIN_ROLE=superadmin npm run create-admin
+ADMIN_NAME="Nama Kamu" ADMIN_EMAIL=admin@toko.com ADMIN_PASSWORD="passwordAman123" ADMIN_ROLE=superadmin npm run create-admin
 ```
+
+> 💡 **Tip:** ganti `passwordAman123` dengan password kamu sendiri yang kuat.
+> Aturan: minimal 10 karakter, ada huruf + angka, tidak sama dengan email.
 
 **Cara B: Via .env.local**
 
@@ -97,7 +100,7 @@ Tambahkan ke `.env.local` (jangan commit):
 ```env
 ADMIN_NAME=Nama Kamu
 ADMIN_EMAIL=admin@toko.com
-ADMIN_PASSWORD=password-yang-aman-min-8-karakter
+ADMIN_PASSWORD=passwordAman123
 ADMIN_ROLE=superadmin
 ```
 
