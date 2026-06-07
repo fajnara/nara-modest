@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import ImageUploader from "./ImageUploader";
 
 const FIELDS = [
   { name: "storeName",         label: "Nama Toko",            placeholder: "Nara Modest" },
@@ -23,6 +24,7 @@ export default function SettingsForm({ settings, action }) {
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
   const [primaryColor, setPrimaryColor] = useState(settings.primaryColor || "#8B5E3C");
+  const [logo, setLogo] = useState(settings.logo || null);
 
   const isColorValid = HEX_REGEX.test(primaryColor);
 
@@ -38,6 +40,7 @@ export default function SettingsForm({ settings, action }) {
 
     const form = new FormData(e.target);
     const data = Object.fromEntries(form.entries());
+    data.logo = logo; // attach uploaded logo ref
 
     try {
       await action(data);
@@ -53,6 +56,18 @@ export default function SettingsForm({ settings, action }) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      {/* Logo upload */}
+      <div className="max-w-[200px]">
+        <ImageUploader
+          label="Logo Toko"
+          value={logo}
+          onChange={setLogo}
+        />
+        <p className="text-[10px] text-[#A8A29E] mt-1">
+          Logo tampil di header, sidebar, dan jadi preview saat link di-share.
+        </p>
+      </div>
+
       {FIELDS.map((f) => (
         <div key={f.name}>
           <label className="block text-xs font-semibold text-[#171717] mb-1.5">{f.label}</label>

@@ -10,6 +10,7 @@ export default async function EditProductPage({ params }) {
       `*[_type == "product" && _id == $id][0]{
         _id, name, price, discountPrice, description, material,
         colors, sizes, isAvailable, isFeatured, sortOrder,
+        image, gallery,
         "category": category->{ _id, title }
       }`,
       { id }

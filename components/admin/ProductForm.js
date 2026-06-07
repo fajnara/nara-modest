@@ -2,11 +2,17 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import ImageUploader from "./ImageUploader";
+import GalleryUploader from "./GalleryUploader";
 
 export default function ProductForm({ product, categories, action }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // Controlled state for image fields (managed outside form data)
+  const [mainImage, setMainImage] = useState(product?.image || null);
+  const [gallery, setGallery] = useState(product?.gallery || []);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -15,12 +21,17 @@ export default function ProductForm({ product, categories, action }) {
 
     const formData = new FormData(e.target);
 
-    // Split comma-separated lists into arrays
     const parseList = (str) =>
       (str || "")
         .split(",")
         .map((s) => s.trim())
         .filter(Boolean);
+
+    if (!mainImage) {
+      setError("Foto utama wajib diisi");
+      setLoading(false);
+      return;
+    }
 
     const data = {
       name: formData.get("name"),
@@ -34,6 +45,8 @@ export default function ProductForm({ product, categories, action }) {
       isAvailable: formData.get("isAvailable") === "on",
       isFeatured: formData.get("isFeatured") === "on",
       sortOrder: formData.get("sortOrder"),
+      image: mainImage,
+      gallery: gallery,
     };
 
     try {
@@ -52,6 +65,21 @@ export default function ProductForm({ product, categories, action }) {
 
   return (
     <form onSubmit={handleSubmit} className="max-w-xl space-y-5">
+      {/* Main Image */}
+      <ImageUploader
+        label="Foto Utama *"
+        value={mainImage}
+        onChange={setMainImage}
+      />
+
+      {/* Gallery */}
+      <GalleryUploader
+        label="Galeri Foto Tambahan"
+        value={gallery}
+        onChange={setGallery}
+        max={6}
+      />
+
       <div>
         <label className="block text-xs font-semibold text-[#171717] mb-1.5">
           Nama Produk <span className="text-red-500">*</span>

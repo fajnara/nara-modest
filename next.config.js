@@ -13,6 +13,12 @@ const nextConfig = {
       },
     ],
   },
+  experimental: {
+    // Allow Server Actions to receive larger payloads (image uploads up to 5MB)
+    serverActions: {
+      bodySizeLimit: "6mb",
+    },
+  },
 };
 
 module.exports = nextConfig;
