@@ -48,17 +48,28 @@ export default function ProductGrid({
 
   return (
     <div className={gridClass}>
-      {products.map((product) => (
-        <ProductCard
-          key={product._id}
-          product={product}
-          onCardClick={() => onProductClick(product)}
-          onAddToCart={(e) => {
-            e.stopPropagation();
-            onAddToCart(product);
-          }}
-        />
-      ))}
+      {products.map((product) => {
+        const hasVariants =
+          (product.colors?.length || 0) > 0 || (product.sizes?.length || 0) > 0;
+
+        return (
+          <ProductCard
+            key={product._id}
+            product={product}
+            onCardClick={() => onProductClick(product)}
+            onAddToCart={(e) => {
+              e.stopPropagation();
+              // If product has variants, force user to pick via modal
+              // instead of silently adding without color/size
+              if (hasVariants) {
+                onProductClick(product);
+                return;
+              }
+              onAddToCart(product);
+            }}
+          />
+        );
+      })}
     </div>
   );
 }

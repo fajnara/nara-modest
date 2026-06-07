@@ -49,12 +49,15 @@ export async function generateMetadata() {
   };
 }
 
-export const viewport = {
-  width: "device-width",
-  initialScale: 1,
-  maximumScale: 1,
-  themeColor: "#8B5E3C",
-};
+export async function generateViewport() {
+  const store = await getStore();
+  return {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+    themeColor: store.primaryColor || "#8B5E3C",
+  };
+}
 
 export default function RootLayout({ children }) {
   return (

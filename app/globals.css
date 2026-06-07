@@ -62,9 +62,9 @@ body {
   overflow: hidden;
 }
 
-/* Focus visible ring */
+/* Focus visible ring — uses CSS variable so it adapts to store's primary color */
 :focus-visible {
-  outline: 2px solid #8B5E3C;
+  outline: 2px solid var(--brand);
   outline-offset: 2px;
 }
 

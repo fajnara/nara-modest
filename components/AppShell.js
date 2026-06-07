@@ -11,6 +11,7 @@ import Footer from "./Footer";
 import DesktopSidebar from "./DesktopSidebar";
 import SearchBar from "./SearchBar";
 import ToastContainer, { useToast } from "./Toast";
+import { darkenHex } from "@/lib/colorUtils";
 
 const CART_STORAGE_KEY = "nara-modest-cart";
 
@@ -153,8 +154,9 @@ export default function AppShell({ store, categories, products }) {
     );
   });
 
+  // Auto-derive dark shade so owner only needs to set ONE color in CMS
   const brandColor = store.primaryColor || "#8B5E3C";
-  const brandDark = store.primaryColorDark || "#5C3A24";
+  const brandDark = darkenHex(brandColor, 30);
 
   return (
     <div

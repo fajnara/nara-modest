@@ -59,20 +59,25 @@ export default function CartDrawer({
     if (cart.length === 0) return;
 
     setNameError("");
-    const url = generateWhatsAppUrl({
-      whatsappNumber: store?.whatsappNumber,
-      cartItems: cart,
-      customerName,
-      customerNote,
-      subtotal,
-      storeName: store?.storeName,
-    });
 
-    window.open(url, "_blank", "noopener,noreferrer");
-    onClearCart();
-    setCustomerName("");
-    setCustomerNote("");
-    onClose();
+    try {
+      const url = generateWhatsAppUrl({
+        whatsappNumber: store?.whatsappNumber,
+        cartItems: cart,
+        customerName,
+        customerNote,
+        subtotal,
+        storeName: store?.storeName,
+      });
+
+      window.open(url, "_blank", "noopener,noreferrer");
+      onClearCart();
+      setCustomerName("");
+      setCustomerNote("");
+      onClose();
+    } catch (err) {
+      setNameError(err.message || "Gagal membuat pesanan");
+    }
   }
 
   const isEmpty = cart.length === 0;
