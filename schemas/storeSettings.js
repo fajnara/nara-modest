@@ -70,6 +70,13 @@ export const storeSettingsSchema = {
       title: "Warna Utama (hex)",
       type: "string",
       description: "Contoh: #8B5E3C — warna tombol, aksen, dll.",
+      validation: (Rule) =>
+        Rule.custom((val) => {
+          if (!val) return true;
+          return /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(val)
+            ? true
+            : "Gunakan format hex, contoh: #8B5E3C atau #abc";
+        }),
     },
     {
       name: "seoTitle",
