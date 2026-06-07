@@ -139,12 +139,45 @@ npx sanity dataset import backup.tar.gz production
 
 ---
 
-## Webhooks (Advanced)
+## Webhooks (Instant Revalidation)
 
-Untuk trigger redeploy otomatis saat konten berubah:
+Untuk update website **langsung** (<1 detik) setiap kali publish di Sanity Studio:
 
-1. Vercel project → Settings → **Deploy Hooks** → buat hook URL
-2. Sanity dashboard → API → **Webhooks** → buat webhook ke URL itu
-3. Setiap kali ada publish, Vercel akan rebuild
+### 1. Generate secret
 
-(Tidak wajib karena template sudah pakai ISR — auto-update tiap 60 detik.)
+```bash
+# macOS / Linux
+openssl rand -hex 32
+
+# Windows PowerShell
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+
+### 2. Set env variable
+
+Tambahkan ke `.env.local` (dan Vercel env vars):
+
+```env
+SANITY_REVALIDATE_SECRET=hasil_secret_dari_step_1
+```
+
+### 3. Konfigurasi webhook di Sanity
+
+1. Buka [sanity.io/manage](https://sanity.io/manage) → project kamu → **API** → **Webhooks**
+2. Klik **Create webhook**
+3. Isi:
+   - **Name**: `Revalidate Next.js`
+   - **URL**: `https://your-site.vercel.app/api/revalidate`
+   - **Dataset**: `production`
+   - **Trigger on**: ✓ Create, ✓ Update, ✓ Delete
+   - **Filter** (opsional): `_type in ["product", "category", "storeSettings"]`
+   - **HTTP method**: `POST`
+   - **API version**: `v2021-03-25` atau lebih baru
+   - **Secret**: paste secret yang sama dari step 1
+4. **Save**
+
+### 4. Test
+
+Edit produk apapun di Sanity Studio → publish. Cek website max 1-2 detik update sudah muncul.
+
+Kalau pakai webhook ini, kamu bisa naikkan `revalidate` di `app/page.js` ke nilai lebih tinggi (misal 3600 = 1 jam) karena webhook sudah handle invalidation. Tapi 30 detik default juga aman sebagai fallback kalau webhook gagal.
