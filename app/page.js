@@ -3,9 +3,10 @@ import { STORE_SETTINGS_QUERY, CATEGORIES_QUERY, PRODUCTS_QUERY } from "@/lib/qu
 import { DUMMY_STORE, DUMMY_CATEGORIES, DUMMY_PRODUCTS } from "@/lib/dummy";
 import AppShell from "@/components/AppShell";
 
-// Force dynamic so admin panel changes reflect immediately
-// On Vercel, this means no page-level caching (always fresh from Sanity)
-export const dynamic = "force-dynamic";
+// ISR: cache page for 30 seconds, then revalidate in background.
+// Fast page loads + max 30s delay before admin edits show up.
+// (Server actions still call revalidatePath() for instant updates after edits.)
+export const revalidate = 30;
 
 async function getData() {
   if (!isSanityConfigured) {

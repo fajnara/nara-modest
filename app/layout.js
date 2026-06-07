@@ -1,17 +1,21 @@
 import "./globals.css";
+import { cache } from "react";
 import { sanityClient, isSanityConfigured } from "@/lib/sanity";
 import { STORE_SETTINGS_QUERY } from "@/lib/queries";
 import { DUMMY_STORE } from "@/lib/dummy";
 import { getImageUrl } from "@/lib/image";
 
-async function getStore() {
+// React cache() dedupes identical calls within a single render
+// (e.g., generateMetadata + generateViewport + RootLayout all calling getStore
+//  results in ONE Sanity fetch, not three).
+const getStore = cache(async () => {
   if (!isSanityConfigured) return DUMMY_STORE;
   try {
-    return await sanityClient.fetch(STORE_SETTINGS_QUERY) || DUMMY_STORE;
+    return (await sanityClient.fetch(STORE_SETTINGS_QUERY)) || DUMMY_STORE;
   } catch {
     return DUMMY_STORE;
   }
-}
+});
 
 export async function generateMetadata() {
   const store = await getStore();
@@ -23,7 +27,6 @@ export async function generateMetadata() {
     "Belanja produk pilihan langsung via WhatsApp.";
   const tagline = store.storeTagline || "Katalog Online";
 
-  // Dynamic OG image from logo if available
   const logoUrl = store.logo ? getImageUrl(store.logo, 1200, 630) : null;
 
   return {
