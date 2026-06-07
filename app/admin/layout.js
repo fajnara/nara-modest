@@ -1,5 +1,6 @@
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import { authOptions } from "@/lib/auth";
 import { adminClient } from "@/lib/sanity-admin";
 import AdminNav from "@/components/admin/AdminNav";
@@ -22,6 +23,18 @@ export async function generateMetadata() {
 }
 
 export default async function AdminLayout({ children }) {
+  // Detect current path via header set by middleware.
+  // Critical: login page is under /admin/* but must NOT trigger redirect-to-login,
+  // otherwise we get an infinite loop.
+  const headersList = await headers();
+  const pathname = headersList.get("x-pathname") || "";
+  const isLoginPage = pathname.startsWith("/admin/login");
+
+  // Render login page bare — no auth check, no nav sidebar
+  if (isLoginPage) {
+    return <>{children}</>;
+  }
+
   const session = await getServerSession(authOptions);
 
   // No session → middleware should've caught this, but defense in depth
