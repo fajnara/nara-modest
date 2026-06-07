@@ -12,7 +12,8 @@
  *
  * Requirements:
  *   - ADMIN_EMAIL: valid email
- *   - ADMIN_PASSWORD: minimum 8 characters
+ *   - ADMIN_PASSWORD: minimum 10 characters, must contain letters AND numbers,
+ *                    cannot equal ADMIN_EMAIL
  *   - ADMIN_ROLE: "superadmin" or "admin" (defaults to "superadmin")
  */
 
