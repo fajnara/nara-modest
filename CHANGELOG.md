@@ -2,6 +2,21 @@
 
 All notable changes to this template.
 
+## [1.3.0] — 2026-06 — Final Polish & SEO
+
+### Added
+- `app/loading.js` — global loading state with spinner
+- `app/not-found.js` — branded 404 page (Bahasa Indonesia)
+- `app/error.js` — branded error boundary with retry + home links
+- `app/robots.js` — production-ready robots.txt (disallow /admin, /studio, /api)
+- `app/sitemap.js` — sitemap.xml stub (extendable when product detail pages added)
+
+### Verified
+- No console.log in production code (only in CLI scripts: seed, create-admin)
+- No TODO/FIXME comments tersisa
+- All admin server actions guarded with requireAdmin / requireSuperAdmin
+- All admin pages re-verify isActive from Sanity (no stale JWT bypass)
+
 ## [1.2.0] — 2026-06 — Session & Password Hardening
 
 ### Security
