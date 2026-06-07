@@ -7,6 +7,7 @@ import { signOut } from "next-auth/react";
 
 const NAV_ITEMS = [
   { href: "/admin",            label: "Dashboard",       icon: "⊞" },
+  { href: "/admin/setup",      label: "Setup Wizard",    icon: "🧭" },
   { href: "/admin/products",   label: "Produk",          icon: "📦" },
   { href: "/admin/categories", label: "Kategori",        icon: "🏷️"  },
   { href: "/admin/settings",   label: "Pengaturan Toko", icon: "⚙️"  },

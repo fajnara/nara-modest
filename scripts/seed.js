@@ -1,6 +1,16 @@
 /**
- * Sanity Seed Script — Nara Modest
+ * Sanity Seed Script — Demo data lengkap untuk Nara Modest template
  * Jalankan: npm run seed
+ *
+ * Generates:
+ *   - 5 kategori
+ *   - 12 produk dengan variasi:
+ *     · harga diskon
+ *     · varian warna + ukuran
+ *     · produk featured (badge "Baru")
+ *     · produk sold out
+ *     · produk dengan material info
+ *   - 1 store settings
  */
 
 const { createClient } = require("@sanity/client");
@@ -30,38 +40,91 @@ const categories = [
 ];
 
 const productData = [
-  { name: "Pashmina Silk Nude",        category: "pashmina",  price: 75000,  featured: true,  desc: "Pashmina silk premium warna nude elegan. Bahan lembut dan nyaman dipakai seharian." },
-  { name: "Pashmina Silk Mauve",       category: "pashmina",  price: 75000,  featured: false, desc: "Pashmina silk warna mauve yang cantik. Cocok untuk tampilan sehari-hari maupun formal." },
-  { name: "Bergo Maryam Cream",        category: "bergo",     price: 89000,  featured: true,  desc: "Bergo Maryam warna cream yang versatile. Bahan voal premium anti-kusut." },
-  { name: "Bergo Daily Black",         category: "bergo",     price: 79000,  featured: false, desc: "Bergo hitam klasik untuk tampilan daily. Praktis dan elegan." },
-  { name: "Abaya Basic Hitam",         category: "abaya",     price: 249000, featured: true,  desc: "Abaya basic hitam potongan A-line. Bahan crepe premium yang jatuh dan elegan." },
-  { name: "Tunik Linen Almond",        category: "abaya",     price: 189000, featured: false, desc: "Tunik linen warna almond yang adem dan casual. Cocok untuk aktivitas santai maupun kerja." },
-  { name: "Inner Ninja Premium",       category: "aksesoris", price: 35000,  featured: false, desc: "Inner ninja premium anti-licin. Bahan jersey lembut dan stretch." },
-  { name: "Scrunchie Premium",         category: "aksesoris", price: 25000,  featured: false, desc: "Scrunchie satin premium. Tersedia dalam berbagai warna pilihan." },
-  { name: "Bundling Pashmina 3 Warna", category: "bundling",  price: 199000, featured: true,  desc: "Paket hemat 3 pashmina silk dengan warna berbeda. Lebih hemat dibanding beli satuan." },
-  { name: "Paket Daily Modest",        category: "bundling",  price: 299000, featured: false, desc: "Paket lengkap daily modest: 1 bergo + 1 inner ninja + 1 scrunchie." },
+  {
+    name: "Pashmina Silk Premium", category: "pashmina", price: 95000, discountPrice: 75000,
+    material: "Silk Premium", colors: ["Nude", "Mauve", "Sage", "Hitam"],
+    desc: "Pashmina silk premium dengan tekstur jatuh dan tidak tembus pandang.", featured: true,
+  },
+  {
+    name: "Pashmina Daily Crinkle", category: "pashmina", price: 65000,
+    material: "Crinkle Voal", colors: ["Cream", "Dusty Pink", "Olive"],
+    desc: "Pashmina crinkle bahan ringan dan adem. Cocok untuk daily.", featured: false,
+  },
+  {
+    name: "Bergo Maryam Cream", category: "bergo", price: 89000,
+    material: "Voal Premium", sizes: ["All Size"],
+    desc: "Bergo Maryam warna cream yang versatile. Anti-kusut.", featured: true,
+  },
+  {
+    name: "Bergo Daily Classic", category: "bergo", price: 79000, discountPrice: 65000,
+    material: "Jersey Premium", colors: ["Hitam", "Navy", "Maroon"], sizes: ["All Size"],
+    desc: "Bergo daily klasik. Praktis dan elegan untuk aktivitas sehari-hari.", featured: false,
+  },
+  {
+    name: "Abaya Basic Hitam", category: "abaya", price: 249000,
+    material: "Crepe Premium", sizes: ["S", "M", "L", "XL"],
+    desc: "Abaya basic hitam dengan potongan A-line. Jatuh dan elegan.", featured: true,
+  },
+  {
+    name: "Abaya Lebaran Edition", category: "abaya", price: 389000, discountPrice: 299000,
+    material: "Premium Crepe + Embroidery", colors: ["Dusty Pink", "Sage Green", "Champagne"],
+    sizes: ["S", "M", "L", "XL"],
+    desc: "Abaya edisi spesial Lebaran dengan detail bordir di lengan.", featured: true,
+  },
+  {
+    name: "Tunik Linen Almond", category: "abaya", price: 189000,
+    material: "Linen Premium", colors: ["Almond", "Sage", "Dusty Rose"], sizes: ["M", "L", "XL"],
+    desc: "Tunik linen warna almond yang adem. Cocok kerja maupun santai.", featured: false,
+  },
+  {
+    name: "Inner Ninja Premium", category: "aksesoris", price: 35000,
+    material: "Jersey Stretch", colors: ["Hitam", "Putih", "Nude", "Cream"],
+    desc: "Inner ninja premium anti-licin. Bahan jersey lembut.", featured: false,
+  },
+  {
+    name: "Scrunchie Satin Set", category: "aksesoris", price: 25000, discountPrice: 19000,
+    colors: ["Mix Warna (3 pcs)"],
+    desc: "Set 3 scrunchie satin premium dengan warna berbeda.", featured: false,
+  },
+  {
+    name: "Bundling Pashmina 3 Warna", category: "bundling", price: 199000,
+    material: "Silk Premium",
+    desc: "Paket hemat 3 pashmina silk warna berbeda. Hemat 50rb!", featured: true,
+  },
+  {
+    name: "Paket Daily Modest", category: "bundling", price: 299000,
+    desc: "Paket lengkap daily: 1 bergo + 1 inner ninja + 1 scrunchie set.", featured: false,
+  },
+  {
+    name: "Limited Edition Eid Box", category: "bundling", price: 599000, discountPrice: 499000,
+    desc: "Paket spesial Idul Fitri: abaya + bergo + pashmina + box exclusive.", featured: true,
+    available: false, // Sold out untuk demo
+  },
 ];
 
 const storeSettings = {
-  storeName:      "Nara Modest",
-  storeTagline:   "Modest Wear Catalog",
-  whatsappNumber: "6281234567890",
-  instagramUrl:   "https://instagram.com/naramodest",
-  address:        "Sampit, Indonesia",
-  heroTitle:      "Elegan Setiap Hari",
-  heroSubtitle:   "Belanja koleksi hijab dan modest wear terbaru langsung via WhatsApp.",
-  promoText:      "Koleksi baru minggu ini sudah tersedia.",
+  storeName:        "Nara Modest",
+  storeTagline:     "Modest Wear Catalog",
+  whatsappNumber:   "6281234567890",
+  instagramUsername:"naramodest",
+  instagramUrl:     "https://instagram.com/naramodest",
+  address:          "Sampit, Indonesia",
+  heroTitle:        "Elegan Setiap Hari",
+  heroSubtitle:     "Belanja koleksi hijab dan modest wear terbaru langsung via WhatsApp.",
+  promoText:        "Koleksi baru minggu ini sudah tersedia.",
+  primaryColor:     "#8B5E3C",
+  seoTitle:         "",
+  seoDescription:   "Belanja modest wear premium langsung via WhatsApp. Pashmina, bergo, abaya, dan aksesoris.",
 };
 
 // ── Main ──────────────────────────────────────────────
 
 async function seed() {
-  console.log("🌱 Mulai seed data ke Sanity...\n");
+  console.log("\n🌱 Mulai seed data demo ke Sanity...\n");
 
   // 1. Categories
   console.log("📂 Membuat kategori...");
   const catIdMap = {};
-
   for (const cat of categories) {
     const id = `category-${cat.slug}`;
     await client.createOrReplace({
@@ -85,32 +148,46 @@ async function seed() {
       .replace(/[^a-z0-9-]/g, "");
     const id = `product-${slugText}`;
 
-    await client.createOrReplace({
+    const doc = {
       _id: id,
       _type: "product",
       name: p.name,
       slug:     { _type: "slug", current: slugText },
       category: { _type: "reference", _ref: catIdMap[p.category] },
-      price:       p.price,
-      description: p.desc,
-      isAvailable: true,
-      isFeatured:  p.featured,
-      sortOrder:   i + 1,
-    });
-    console.log(`  ✓ ${p.name} — Rp${p.price.toLocaleString("id-ID")}`);
+      price:        p.price,
+      description:  p.desc,
+      material:     p.material || "",
+      colors:       p.colors || [],
+      sizes:        p.sizes || [],
+      isAvailable:  p.available !== false,
+      isFeatured:   p.featured,
+      sortOrder:    i + 1,
+    };
+
+    if (p.discountPrice) doc.discountPrice = p.discountPrice;
+
+    await client.createOrReplace(doc);
+
+    const tags = [];
+    if (p.discountPrice) tags.push("DISKON");
+    if (p.featured) tags.push("BARU");
+    if (p.available === false) tags.push("HABIS");
+    const tagStr = tags.length ? ` [${tags.join(", ")}]` : "";
+
+    console.log(`  ✓ ${p.name} — Rp${p.price.toLocaleString("id-ID")}${tagStr}`);
   }
 
   // 3. Store Settings
   console.log("\n🏪 Membuat pengaturan toko...");
   await client.createOrReplace({
-    _id:   "storeSettings-singleton",
+    _id: "storeSettings-singleton",
     _type: "storeSettings",
     ...storeSettings,
   });
   console.log(`  ✓ ${storeSettings.storeName}`);
 
-  console.log("\n✅ Seed selesai! Buka website untuk melihat hasilnya.");
-  console.log("💡 Foto produk masih kosong — upload manual via Studio.");
+  console.log(`\n✅ Seed selesai! ${categories.length} kategori, ${productData.length} produk siap.`);
+  console.log("💡 Foto produk masih kosong — upload via admin panel atau Sanity Studio.\n");
 }
 
 seed().catch((err) => {

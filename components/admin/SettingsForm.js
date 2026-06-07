@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ImageUploader from "./ImageUploader";
+import ThemePresetPicker from "./ThemePresetPicker";
 
 const FIELDS = [
   { name: "storeName",         label: "Nama Toko",            placeholder: "Nara Modest" },
@@ -77,39 +78,16 @@ export default function SettingsForm({ settings, action }) {
         </div>
       ))}
 
-      {/* Primary Color — with visual color picker + hex input + live preview */}
+      {/* Primary Color — preset picker + custom */}
       <div>
-        <label className="block text-xs font-semibold text-[#171717] mb-1.5">
+        <label className="block text-xs font-semibold text-[#171717] mb-2">
           Warna Utama
         </label>
-        <div className="flex items-center gap-2">
-          <input
-            type="color"
-            value={isColorValid ? primaryColor : "#8B5E3C"}
-            onChange={(e) => setPrimaryColor(e.target.value)}
-            className="w-12 h-11 rounded-xl border border-[#E5E5E5] cursor-pointer bg-white"
-            aria-label="Pilih warna utama"
-          />
-          <input
-            name="primaryColor"
-            value={primaryColor}
-            onChange={(e) => setPrimaryColor(e.target.value)}
-            placeholder="#8B5E3C"
-            className={`flex-1 px-3.5 py-2.5 rounded-xl border text-sm outline-none bg-[#FAFAF8] uppercase tracking-wider tabular-nums ${
-              primaryColor && !isColorValid
-                ? "border-red-400 focus:border-red-500"
-                : "border-[#E5E5E5] focus:border-[#8B5E3C]"
-            }`}
-          />
-        </div>
-        <p className="text-[10px] text-[#A8A29E] mt-1">
-          Warna untuk tombol, badge, dan aksen di seluruh website.
-        </p>
-        {primaryColor && !isColorValid && (
-          <p className="text-[10px] text-red-500 mt-1">
-            Format harus hex valid. Contoh: #8B5E3C atau #abc
-          </p>
-        )}
+        <input type="hidden" name="primaryColor" value={primaryColor} />
+        <ThemePresetPicker
+          value={primaryColor}
+          onChange={setPrimaryColor}
+        />
       </div>
 
       <div>
