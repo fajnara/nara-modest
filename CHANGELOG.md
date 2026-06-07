@@ -2,6 +2,32 @@
 
 All notable changes to this template.
 
+## [1.1.0] — 2026-06 — Security Hardening
+
+### Security
+- **Server actions now require authentication** via `requireAdmin()` / `requireSuperAdmin()`
+  guards. Previously only middleware protected `/admin/*` routes — actions themselves
+  were callable from anywhere.
+- `/admin/users` page now redirects non-superadmin to `/admin`
+- Non-superadmin no longer sees "Users" menu in sidebar
+- `createAdminUser`, `updateAdminUser`, `deleteAdminUser` require superadmin role
+- Server prevents deleting current user (no more lockout)
+- Server prevents deleting/deactivating/downgrading the last active superadmin
+- `uploadImage` action now requires authentication
+
+### Added
+- `lib/adminAuth.js` — `requireAdmin()`, `requireSuperAdmin()`, `isSuperAdmin()` helpers
+- `lib/validators.js` — server-side input validation for all entities
+- Slug uniqueness: products & categories auto-append `-2`, `-3` if duplicate
+- Product slug updates when name changes
+- CategoryManager & UserManager now display server errors inline
+- Admin pages metadata: `robots: { index: false }` to prevent indexing
+
+### Changed
+- `create-admin.js`: no more hardcoded password. Reads `ADMIN_EMAIL`, `ADMIN_PASSWORD`,
+  `ADMIN_NAME`, `ADMIN_ROLE` from environment. Validates email format + password length (min 8).
+- Admin layout metadata: dynamic store name from Sanity (no more "Nara Modest" hardcoded)
+
 ## [1.0.0] — 2026-06
 
 ### Added

@@ -1,6 +1,7 @@
 "use server";
 
 import { adminClient } from "@/lib/sanity-admin";
+import { requireAdmin } from "@/lib/adminAuth";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
@@ -14,6 +15,8 @@ const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
  *   await adminClient.patch(productId).set({ image: ref }).commit();
  */
 export async function uploadImage(formData) {
+  await requireAdmin();
+
   const file = formData.get("file");
 
   if (!file || typeof file === "string") {

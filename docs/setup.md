@@ -78,21 +78,38 @@ node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
 
 ## Step 4: Buat Admin User Pertama
 
-Edit `scripts/create-admin.js` untuk ubah email & password default:
+Tidak ada password default — kamu **wajib** set via environment variable.
 
-```js
-const ADMIN_NAME     = "Nama Kamu";
-const ADMIN_EMAIL    = "admin@tokokamu.com";
-const ADMIN_PASSWORD = "passwordYangAman123";
+**Cara A: Via shell (recommended)**
+
+```bash
+# Windows PowerShell
+$env:ADMIN_NAME="Nama Kamu"; $env:ADMIN_EMAIL="admin@toko.com"; $env:ADMIN_PASSWORD="password-yang-aman-min-8-karakter"; $env:ADMIN_ROLE="superadmin"; npm run create-admin
+
+# macOS / Linux
+ADMIN_NAME="Nama Kamu" ADMIN_EMAIL=admin@toko.com ADMIN_PASSWORD="password-aman" ADMIN_ROLE=superadmin npm run create-admin
 ```
 
-Jalankan:
+**Cara B: Via .env.local**
+
+Tambahkan ke `.env.local` (jangan commit):
+
+```env
+ADMIN_NAME=Nama Kamu
+ADMIN_EMAIL=admin@toko.com
+ADMIN_PASSWORD=password-yang-aman-min-8-karakter
+ADMIN_ROLE=superadmin
+```
+
+Lalu:
 
 ```bash
 npm run create-admin
 ```
 
-Atau buat via Sanity Studio (lihat [docs/sanity.md](./sanity.md)).
+**Aturan password:** minimal 8 karakter. Email harus valid. Role hanya `admin` atau `superadmin`.
+
+User pertama sebaiknya **superadmin** karena hanya superadmin yang bisa kelola user lain.
 
 ---
 

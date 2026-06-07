@@ -4,7 +4,8 @@ import { useState, useTransition } from "react";
 import { createAdminUser, updateAdminUser, deleteAdminUser } from "@/actions/admin";
 import { useRouter } from "next/navigation";
 
-export default function UserManager({ users, currentUserId }) {
+export default function UserManager({ users, currentUserId, currentUserRole }) {
+  const isSuperadmin = currentUserRole === "superadmin";
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [showAdd, setShowAdd] = useState(false);
@@ -36,24 +37,40 @@ export default function UserManager({ users, currentUserId }) {
   }
 
   function handleSave(id) {
+    setError("");
     startTransition(async () => {
-      await updateAdminUser(id, editForm);
-      setEditing(null);
-      router.refresh();
+      try {
+        await updateAdminUser(id, editForm);
+        setEditing(null);
+        router.refresh();
+      } catch (err) {
+        setError(err.message || "Gagal menyimpan perubahan");
+      }
     });
   }
 
   function handleDelete(id) {
-    if (id === currentUserId) { alert("Tidak bisa menghapus akun sendiri."); return; }
+    setError("");
+    if (id === currentUserId) { setError("Tidak bisa menghapus akun sendiri."); return; }
     if (!confirm("Hapus user ini?")) return;
     startTransition(async () => {
-      await deleteAdminUser(id);
-      router.refresh();
+      try {
+        await deleteAdminUser(id);
+        router.refresh();
+      } catch (err) {
+        setError(err.message || "Gagal menghapus user");
+      }
     });
   }
 
   return (
     <div className="space-y-4">
+      {error && (
+        <div className="text-xs text-red-600 bg-red-50 border border-red-200 px-3 py-2.5 rounded-xl">
+          {error}
+        </div>
+      )}
+
       <div className="bg-white rounded-2xl border border-[#E5E5E5] overflow-hidden">
         <table className="w-full">
           <thead>

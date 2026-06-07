@@ -13,13 +13,19 @@ export default function CategoryManager({ categories: initial }) {
   const [newOrder, setNewOrder] = useState("");
   const [editTitle, setEditTitle] = useState("");
   const [editOrder, setEditOrder] = useState("");
+  const [error, setError] = useState("");
 
   function handleAdd() {
     if (!newTitle.trim()) return;
+    setError("");
     startTransition(async () => {
-      await createCategory({ title: newTitle.trim(), order: newOrder || 99 });
-      setNewTitle(""); setNewOrder(""); setShowAdd(false);
-      router.refresh();
+      try {
+        await createCategory({ title: newTitle.trim(), order: newOrder || 99 });
+        setNewTitle(""); setNewOrder(""); setShowAdd(false);
+        router.refresh();
+      } catch (err) {
+        setError(err.message || "Gagal menambah kategori");
+      }
     });
   }
 
@@ -31,23 +37,39 @@ export default function CategoryManager({ categories: initial }) {
 
   function handleSave(id) {
     if (!editTitle.trim()) return;
+    setError("");
     startTransition(async () => {
-      await updateCategory(id, { title: editTitle.trim(), order: editOrder || 99 });
-      setEditing(null);
-      router.refresh();
+      try {
+        await updateCategory(id, { title: editTitle.trim(), order: editOrder || 99 });
+        setEditing(null);
+        router.refresh();
+      } catch (err) {
+        setError(err.message || "Gagal menyimpan");
+      }
     });
   }
 
   function handleDelete(id) {
     if (!confirm("Hapus kategori ini? Produk yang terhubung tidak akan ikut terhapus.")) return;
+    setError("");
     startTransition(async () => {
-      await deleteCategory(id);
-      router.refresh();
+      try {
+        await deleteCategory(id);
+        router.refresh();
+      } catch (err) {
+        setError(err.message || "Gagal menghapus");
+      }
     });
   }
 
   return (
     <div className="space-y-4">
+      {error && (
+        <div className="text-xs text-red-600 bg-red-50 border border-red-200 px-3 py-2.5 rounded-xl">
+          {error}
+        </div>
+      )}
+
       {/* List */}
       <div className="bg-white rounded-2xl border border-[#E5E5E5] overflow-hidden">
         {initial.length === 0 && !showAdd ? (

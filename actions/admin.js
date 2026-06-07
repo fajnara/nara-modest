@@ -1,8 +1,46 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { adminClient } from "@/lib/sanity-admin";
 import bcrypt from "bcryptjs";
+import { adminClient } from "@/lib/sanity-admin";
+import { requireAdmin, requireSuperAdmin } from "@/lib/adminAuth";
+import {
+  validateProductInput,
+  validateCategoryInput,
+  validateStoreSettings,
+  validateAdminUserInput,
+} from "@/lib/validators";
+
+// ── Slug Helpers ──────────────────────────────────────
+
+function slugify(name) {
+  return String(name || "")
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^a-z0-9-]/g, "")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+/**
+ * Ensure slug is unique within a document type.
+ * Appends -2, -3, etc. if duplicates exist.
+ */
+async function uniqueSlug(type, baseSlug, excludeId = null) {
+  if (!baseSlug) baseSlug = "item";
+  let candidate = baseSlug;
+  let suffix = 2;
+
+  while (true) {
+    const existing = await adminClient.fetch(
+      `*[_type == $type && slug.current == $slug && _id != $excludeId][0]._id`,
+      { type, slug: candidate, excludeId: excludeId || "" }
+    );
+    if (!existing) return candidate;
+    candidate = `${baseSlug}-${suffix}`;
+    suffix++;
+  }
+}
 
 // ── Products ──────────────────────────────────────────
 
@@ -27,10 +65,11 @@ function buildProductDoc(data) {
 }
 
 export async function createProduct(data) {
-  const slug = data.name
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/[^a-z0-9-]/g, "");
+  await requireAdmin();
+  validateProductInput(data, { requireImage: true });
+
+  const baseSlug = slugify(data.name);
+  const slug = await uniqueSlug("product", baseSlug);
 
   await adminClient.create({
     _type: "product",
@@ -43,20 +82,43 @@ export async function createProduct(data) {
 }
 
 export async function updateProduct(id, data) {
-  await adminClient.patch(id).set(buildProductDoc(data)).commit();
+  await requireAdmin();
+  validateProductInput(data, { requireImage: true });
+
+  // Re-derive slug if name changed
+  const existing = await adminClient.fetch(
+    `*[_type == "product" && _id == $id][0]{ name, "slug": slug.current }`,
+    { id }
+  );
+
+  const patch = adminClient.patch(id).set(buildProductDoc(data));
+
+  if (existing?.name !== data.name) {
+    const baseSlug = slugify(data.name);
+    const slug = await uniqueSlug("product", baseSlug, id);
+    patch.set({ slug: { _type: "slug", current: slug } });
+  }
+
+  await patch.commit();
 
   revalidatePath("/");
   revalidatePath("/admin/products");
 }
 
 export async function deleteProduct(id) {
+  await requireAdmin();
+  if (!id) throw new Error("ID produk tidak valid");
+
   await adminClient.delete(id);
   revalidatePath("/");
   revalidatePath("/admin/products");
 }
 
 export async function toggleProductAvailability(id, isAvailable) {
-  await adminClient.patch(id).set({ isAvailable }).commit();
+  await requireAdmin();
+  if (!id) throw new Error("ID produk tidak valid");
+
+  await adminClient.patch(id).set({ isAvailable: !!isAvailable }).commit();
   revalidatePath("/");
   revalidatePath("/admin/products");
 }
@@ -64,10 +126,11 @@ export async function toggleProductAvailability(id, isAvailable) {
 // ── Categories ────────────────────────────────────────
 
 export async function createCategory(data) {
-  const slug = data.title
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/[^a-z0-9-]/g, "");
+  await requireAdmin();
+  validateCategoryInput(data);
+
+  const baseSlug = slugify(data.title);
+  const slug = await uniqueSlug("category", baseSlug);
 
   await adminClient.create({
     _type: "category",
@@ -81,6 +144,10 @@ export async function createCategory(data) {
 }
 
 export async function updateCategory(id, data) {
+  await requireAdmin();
+  if (!id) throw new Error("ID kategori tidak valid");
+  validateCategoryInput(data);
+
   await adminClient
     .patch(id)
     .set({
@@ -94,6 +161,9 @@ export async function updateCategory(id, data) {
 }
 
 export async function deleteCategory(id) {
+  await requireAdmin();
+  if (!id) throw new Error("ID kategori tidak valid");
+
   await adminClient.delete(id);
   revalidatePath("/");
   revalidatePath("/admin/categories");
@@ -102,7 +172,9 @@ export async function deleteCategory(id) {
 // ── Store Settings ────────────────────────────────────
 
 export async function updateStoreSettings(data) {
-  // Always update whichever document the website reads first
+  await requireAdmin();
+  validateStoreSettings(data);
+
   const existingId = await adminClient.fetch(
     `*[_type == "storeSettings"][0]._id`
   );
@@ -131,11 +203,28 @@ export async function updateStoreSettings(data) {
 }
 
 // ── Admin Users ───────────────────────────────────────
+// All user management requires superadmin role.
+// Plus extra protection: cannot delete self or last active superadmin.
+
+async function countActiveSuperadmins(excludeId = null) {
+  return adminClient.fetch(
+    `count(*[_type == "adminUser" && role == "superadmin" && isActive == true && _id != $excludeId])`,
+    { excludeId: excludeId || "" }
+  );
+}
 
 export async function createAdminUser(data) {
+  const currentUser = await requireSuperAdmin();
+  validateAdminUserInput(data, { requirePassword: true });
+
+  // Only superadmin can create another superadmin (enforced by requireSuperAdmin above)
+  void currentUser;
+
+  const email = String(data.email).trim().toLowerCase();
+
   const existing = await adminClient.fetch(
     `*[_type == "adminUser" && email == $email][0]._id`,
-    { email: data.email }
+    { email }
   );
   if (existing) throw new Error("Email sudah terdaftar");
 
@@ -144,9 +233,9 @@ export async function createAdminUser(data) {
   await adminClient.create({
     _type: "adminUser",
     name: data.name,
-    email: data.email,
+    email,
     passwordHash,
-    role: data.role || "admin",
+    role: ["admin", "superadmin"].includes(data.role) ? data.role : "admin",
     isActive: true,
   });
 
@@ -154,11 +243,41 @@ export async function createAdminUser(data) {
 }
 
 export async function updateAdminUser(id, data) {
+  const currentUser = await requireSuperAdmin();
+  if (!id) throw new Error("ID user tidak valid");
+  validateAdminUserInput(data, { requirePassword: false });
+
+  const target = await adminClient.fetch(
+    `*[_type == "adminUser" && _id == $id][0]{ _id, role, isActive }`,
+    { id }
+  );
+  if (!target) throw new Error("User tidak ditemukan");
+
+  // Determine new state
+  const newRole = ["admin", "superadmin"].includes(data.role) ? data.role : target.role;
+  const newActive = data.isActive === true || data.isActive === "true";
+
+  // Protect last active superadmin from being downgraded/deactivated
+  const isCurrentlySuperadmin = target.role === "superadmin" && target.isActive;
+  const willStaySuperadmin = newRole === "superadmin" && newActive;
+
+  if (isCurrentlySuperadmin && !willStaySuperadmin) {
+    const otherSuperadmins = await countActiveSuperadmins(id);
+    if (otherSuperadmins === 0) {
+      throw new Error("Tidak bisa menonaktifkan/menurunkan superadmin terakhir");
+    }
+  }
+
+  // Prevent self-deactivation (can lock yourself out)
+  if (target._id === currentUser.id && !newActive) {
+    throw new Error("Tidak bisa menonaktifkan akun sendiri");
+  }
+
   const updates = {
     name: data.name,
-    email: data.email,
-    role: data.role,
-    isActive: data.isActive === true || data.isActive === "true",
+    email: String(data.email).trim().toLowerCase(),
+    role: newRole,
+    isActive: newActive,
   };
 
   if (data.password) {
@@ -170,6 +289,28 @@ export async function updateAdminUser(id, data) {
 }
 
 export async function deleteAdminUser(id) {
+  const currentUser = await requireSuperAdmin();
+  if (!id) throw new Error("ID user tidak valid");
+
+  // Prevent deleting yourself
+  if (id === currentUser.id) {
+    throw new Error("Tidak bisa menghapus akun sendiri");
+  }
+
+  const target = await adminClient.fetch(
+    `*[_type == "adminUser" && _id == $id][0]{ _id, role, isActive }`,
+    { id }
+  );
+  if (!target) throw new Error("User tidak ditemukan");
+
+  // Protect last active superadmin
+  if (target.role === "superadmin" && target.isActive) {
+    const otherSuperadmins = await countActiveSuperadmins(id);
+    if (otherSuperadmins === 0) {
+      throw new Error("Tidak bisa menghapus superadmin terakhir yang aktif");
+    }
+  }
+
   await adminClient.delete(id);
   revalidatePath("/admin/users");
 }

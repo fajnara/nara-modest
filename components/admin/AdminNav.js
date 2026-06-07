@@ -5,18 +5,23 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 
-const NAV_ITEMS = [
+const ALL_NAV_ITEMS = [
   { href: "/admin",            label: "Dashboard",       icon: "⊞" },
   { href: "/admin/setup",      label: "Setup Wizard",    icon: "🧭" },
   { href: "/admin/products",   label: "Produk",          icon: "📦" },
   { href: "/admin/categories", label: "Kategori",        icon: "🏷️"  },
   { href: "/admin/settings",   label: "Pengaturan Toko", icon: "⚙️"  },
-  { href: "/admin/users",      label: "Users",           icon: "👤" },
+  { href: "/admin/users",      label: "Users",           icon: "👤", superadminOnly: true },
 ];
 
 export default function AdminNav({ user }) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  // Filter nav items based on role
+  const NAV_ITEMS = ALL_NAV_ITEMS.filter(
+    (item) => !item.superadminOnly || user?.role === "superadmin"
+  );
 
   return (
     <>
