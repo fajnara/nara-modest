@@ -3,10 +3,11 @@ import { STORE_SETTINGS_QUERY, CATEGORIES_QUERY, PRODUCTS_QUERY } from "@/lib/qu
 import { DUMMY_STORE, DUMMY_CATEGORIES, DUMMY_PRODUCTS } from "@/lib/dummy";
 import AppShell from "@/components/AppShell";
 
-// ISR: cache page for 30 seconds, then revalidate in background.
-// Fast page loads + max 30s delay before admin edits show up.
-// (Server actions still call revalidatePath() for instant updates after edits.)
-export const revalidate = 30;
+// ISR: cache page for 10 seconds, then revalidate in background.
+// - Webhook handles instant invalidation on Studio publish
+// - ISR is the safety net if webhook fails (max 10s stale data)
+// - Public Sanity client uses useCdn:false so fetches always return fresh data
+export const revalidate = 10;
 
 async function getData() {
   if (!isSanityConfigured) {
