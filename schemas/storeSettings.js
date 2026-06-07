@@ -71,7 +71,7 @@ export const storeSettingsSchema = {
       name: "heroCtaText",
       title: "Teks Tombol Hero",
       type: "string",
-      description: 'Teks tombol di hero banner. Kosongkan untuk pakai default: "Lihat Koleksi".',
+      description: "Teks tombol hero. Kosongkan untuk memakai default: Lihat Koleksi.",
     },
     {
       name: "promoText",

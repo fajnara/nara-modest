@@ -1,7 +1,15 @@
 import Image from "next/image";
 import { getImageUrl } from "@/lib/image";
 
-export default function HeroBanner({ heroTitle, heroSubtitle, heroImage, heroCtaText, promoText, variant = "mobile" }) {
+export default function HeroBanner({
+  heroTitle,
+  heroSubtitle,
+  heroImage,
+  heroCtaText,
+  promoText,
+  variant = "mobile",
+  targetId = "products",
+}) {
   const title = heroTitle || "Elegan Setiap Hari";
   const subtitle = heroSubtitle || "Belanja koleksi hijab dan modest wear terbaru langsung via WhatsApp.";
   const cta = heroCtaText?.trim() || "Lihat Koleksi";
@@ -68,7 +76,7 @@ export default function HeroBanner({ heroTitle, heroSubtitle, heroImage, heroCta
 
         {/* CTA */}
         <a
-          href="#products"
+          href={`#${targetId}`}
           className="inline-flex items-center gap-2 bg-white text-[#171717] hover:bg-[#FAFAF8] font-semibold rounded-full px-5 py-2.5 text-sm transition-colors shadow-sm"
         >
           {cta}

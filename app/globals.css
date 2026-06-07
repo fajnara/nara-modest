@@ -28,6 +28,10 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 html,
 body {
   background-color: #F3F0EA;

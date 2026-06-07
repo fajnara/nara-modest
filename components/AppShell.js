@@ -182,10 +182,11 @@ export default function AppShell({ store, categories, products }) {
               heroImage={store.heroImage}
               heroCtaText={store.heroCtaText}
               promoText={store.promoText}
+              targetId="mobile-products"
             />
 
             {/* Browsing panel — search + category in one card */}
-            <div id="products" className="px-4 mt-5 scroll-mt-20">
+            <div id="mobile-products" className="px-4 mt-5 scroll-mt-20">
               <div className="bg-white rounded-2xl border border-[#E5E5E5] p-3 space-y-3 shadow-sm">
                 <SearchBar value={searchQuery} onChange={setSearchQuery} />
                 <CategoryChips
@@ -267,11 +268,12 @@ export default function AppShell({ store, categories, products }) {
               heroCtaText={store.heroCtaText}
               promoText={store.promoText}
               variant="desktop"
+              targetId="desktop-products"
             />
           </div>
 
           {/* Product grid — 3 columns on desktop */}
-          <div id="products" className="px-6 pt-6 pb-8 flex-1 scroll-mt-20">
+          <div id="desktop-products" className="px-6 pt-6 pb-8 flex-1 scroll-mt-20">
             {/* Editorial section heading */}
             <div className="mb-2 flex items-baseline justify-between gap-3">
               <h2 className="text-lg font-bold text-[#171717]">

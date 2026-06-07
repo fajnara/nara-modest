@@ -15,6 +15,11 @@ export default function ProductCard({ product, onCardClick, onAddToCart }) {
     ? Math.round(((product.price - product.discountPrice) / product.price) * 100)
     : 0;
 
+  // Quick-add button opens modal for variant selection if product has variants,
+  // otherwise adds directly to cart. Reflect that intent in the aria-label.
+  const hasVariants =
+    (product.colors?.length || 0) > 0 || (product.sizes?.length || 0) > 0;
+
   return (
     <div
       className="group bg-white rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] active:scale-[0.99]"
@@ -52,7 +57,11 @@ export default function ProductCard({ product, onCardClick, onAddToCart }) {
           onClick={onAddToCart}
           disabled={!product.isAvailable}
           className="absolute bottom-3 right-3 w-10 h-10 flex items-center justify-center rounded-full btn-brand shadow-md disabled:opacity-40 disabled:cursor-not-allowed active:scale-90 transition-all md:opacity-0 md:group-hover:opacity-100"
-          aria-label={`Tambah ${product.name} ke keranjang`}
+          aria-label={
+            hasVariants
+              ? `Pilih varian ${product.name}`
+              : `Tambah ${product.name} ke keranjang`
+          }
         >
           <Plus className="w-4 h-4" />
         </button>
