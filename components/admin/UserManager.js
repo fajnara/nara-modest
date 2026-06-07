@@ -4,8 +4,10 @@ import { useState, useTransition } from "react";
 import { createAdminUser, updateAdminUser, deleteAdminUser } from "@/actions/admin";
 import { useRouter } from "next/navigation";
 
-export default function UserManager({ users, currentUserId, currentUserRole }) {
-  const isSuperadmin = currentUserRole === "superadmin";
+export default function UserManager({ users, currentUserId }) {
+  // Note: page-level guard already enforces superadmin-only access.
+  // Server actions also enforce role checks. UI here is rendered only
+  // for authorized users.
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [showAdd, setShowAdd] = useState(false);
@@ -147,13 +149,17 @@ export default function UserManager({ users, currentUserId, currentUserRole }) {
             <input value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })}
               type="email" placeholder="Email" className="px-3 py-2 rounded-xl border border-[#E5E5E5] text-sm outline-none" />
             <input value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })}
-              type="password" placeholder="Password" className="px-3 py-2 rounded-xl border border-[#E5E5E5] text-sm outline-none" />
+              type="password" placeholder="Password (min 10, harus ada huruf+angka)"
+              className="px-3 py-2 rounded-xl border border-[#E5E5E5] text-sm outline-none" />
             <select value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })}
               className="px-3 py-2 rounded-xl border border-[#E5E5E5] text-sm outline-none">
               <option value="admin">Admin</option>
               <option value="superadmin">Super Admin</option>
             </select>
           </div>
+          <p className="text-[10px] text-[#A8A29E] mt-1">
+            Password: min 10 karakter, harus ada huruf dan angka, tidak boleh sama dengan email.
+          </p>
           {error && <p className="text-xs text-red-500">{error}</p>}
           <div className="flex gap-2">
             <button onClick={handleAdd} disabled={isPending}

@@ -51,8 +51,20 @@ if (!ADMIN_PASSWORD) {
   console.error('   Contoh: ADMIN_EMAIL=admin@toko.com ADMIN_PASSWORD="rahasia-banget" npm run create-admin');
   process.exit(1);
 }
-if (ADMIN_PASSWORD.length < 8) {
-  console.error("❌ ADMIN_PASSWORD minimal 8 karakter (sekarang", ADMIN_PASSWORD.length, "karakter)");
+if (ADMIN_PASSWORD.length < 10) {
+  console.error("❌ ADMIN_PASSWORD minimal 10 karakter (sekarang", ADMIN_PASSWORD.length, "karakter)");
+  process.exit(1);
+}
+if (!/[a-zA-Z]/.test(ADMIN_PASSWORD)) {
+  console.error("❌ ADMIN_PASSWORD harus mengandung minimal 1 huruf");
+  process.exit(1);
+}
+if (!/\d/.test(ADMIN_PASSWORD)) {
+  console.error("❌ ADMIN_PASSWORD harus mengandung minimal 1 angka");
+  process.exit(1);
+}
+if (ADMIN_PASSWORD.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
+  console.error("❌ ADMIN_PASSWORD tidak boleh sama dengan ADMIN_EMAIL");
   process.exit(1);
 }
 if (!["admin", "superadmin"].includes(ADMIN_ROLE)) {

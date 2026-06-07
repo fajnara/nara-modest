@@ -2,6 +2,28 @@
 
 All notable changes to this template.
 
+## [1.2.0] — 2026-06 — Session & Password Hardening
+
+### Security
+- **No more stale JWT bypass**: `requireAdmin()` now re-fetches user from
+  Sanity on every server action call. Deactivated users are kicked out
+  immediately, even if their JWT hasn't expired.
+- **AdminLayout also verifies isActive**: page-level guard now re-fetches
+  user from DB; deactivated users redirect to login.
+- **Fresh role from DB**: server actions now use latest role from Sanity,
+  not stale JWT — promoting/demoting takes effect on next action.
+- **Stronger password policy**:
+  - Minimum 10 characters (was 8)
+  - Must contain at least one letter AND one number
+  - Cannot equal the email address
+  - Applied to: create-admin script, admin UI form, server validation
+
+### Changed
+- `lib/validators.js`: extracted `validatePassword(password, email)` helper
+- `create-admin.js`: enforces all 4 password rules with clear error messages
+- UserManager: password input now shows policy hint
+- UserManager: cleaned up unused `currentUserRole` prop
+
 ## [1.1.0] — 2026-06 — Security Hardening
 
 ### Security

@@ -107,7 +107,13 @@ Lalu:
 npm run create-admin
 ```
 
-**Aturan password:** minimal 8 karakter. Email harus valid. Role hanya `admin` atau `superadmin`.
+**Aturan password:**
+- Minimal **10 karakter**
+- Wajib mengandung minimal 1 huruf
+- Wajib mengandung minimal 1 angka
+- Tidak boleh sama dengan email
+
+Email harus valid. Role hanya `admin` atau `superadmin`.
 
 User pertama sebaiknya **superadmin** karena hanya superadmin yang bisa kelola user lain.
 

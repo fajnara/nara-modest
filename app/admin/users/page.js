@@ -28,7 +28,6 @@ export default async function UsersPage() {
       <UserManager
         users={users}
         currentUserId={session?.user?.id}
-        currentUserRole={session?.user?.role}
       />
     </div>
   );
