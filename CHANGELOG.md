@@ -2,6 +2,23 @@
 
 All notable changes to this template.
 
+## [1.4.0] — 2026-06 — Login Rate Limiting
+
+### Security
+- **Login brute-force protection**: 5 failed attempts per 15-minute window
+  triggers a 15-minute block (per IP and per email)
+- New `lib/rateLimit.js` — in-memory token bucket with auto-cleanup
+- Tracked by both IP and email: attacker scanning many emails from one IP
+  gets blocked; one email under distributed attack also gets blocked
+- Counters reset on successful login
+- **Session max age reduced**: 7 days (was NextAuth default of 30 days)
+- Rate limit error shown to user in login form with remaining minutes
+
+### Notes
+- In-memory store: state lost on serverless cold start; raises attack cost
+  but not a perfect defense at extreme scale
+- For high-traffic apps, swap `lib/rateLimit.js` for Redis or Vercel KV
+
 ## [1.3.0] — 2026-06 — Final Polish & SEO
 
 ### Added

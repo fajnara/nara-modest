@@ -25,7 +25,13 @@ export default function LoginPage() {
     setLoading(false);
 
     if (res?.error) {
-      setError("Email atau password salah.");
+      // NextAuth throws rate limit error from authorize();
+      // when it contains "menit", show it directly.
+      if (res.error.includes("menit") || res.error.toLowerCase().includes("terlalu banyak")) {
+        setError(res.error);
+      } else {
+        setError("Email atau password salah.");
+      }
     } else {
       router.push("/admin");
       router.refresh();
