@@ -4,21 +4,53 @@ import { useEffect, useState, useMemo } from "react";
 import Image from "next/image";
 import { getImageUrl, PLACEHOLDER_IMAGE } from "@/lib/image";
 import { formatCurrencyShort, getEffectivePrice, hasDiscount } from "@/lib/formatCurrency";
+import { getProductGallery } from "@/actions/product";
 import { X, Plus } from "./icons";
 
 export default function ProductModal({ product, onClose, onAddToCart }) {
-  // Combine main image + gallery into single array
+  // Gallery is fetched lazily on modal open (not included in homepage payload).
+  // Initial state seeds with anything already on the product (e.g., from cache).
+  const [gallery, setGallery] = useState(
+    Array.isArray(product.gallery) ? product.gallery : []
+  );
+  const [galleryLoading, setGalleryLoading] = useState(
+    !Array.isArray(product.gallery)
+  );
+
+  // Combine main image + gallery into single array for navigation
   const allImages = useMemo(() => {
     const list = [];
     if (product.image) list.push(product.image);
-    if (Array.isArray(product.gallery)) list.push(...product.gallery);
+    if (Array.isArray(gallery)) list.push(...gallery);
     return list.length > 0 ? list : [null];
-  }, [product]);
+  }, [product.image, gallery]);
 
   const [activeImageIdx, setActiveImageIdx] = useState(0);
   const [selectedColor, setSelectedColor] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
   const [variantError, setVariantError] = useState("");
+
+  // Lazy-load gallery on modal open
+  useEffect(() => {
+    let cancelled = false;
+    // Skip if already have gallery data
+    if (Array.isArray(product.gallery)) {
+      setGalleryLoading(false);
+      return;
+    }
+    setGalleryLoading(true);
+    getProductGallery(product._id)
+      .then((data) => {
+        if (!cancelled) {
+          setGallery(Array.isArray(data) ? data : []);
+          setGalleryLoading(false);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setGalleryLoading(false);
+      });
+    return () => { cancelled = true; };
+  }, [product._id, product.gallery]);
 
   const colors = product.colors || [];
   const sizes = product.sizes || [];
@@ -98,8 +130,8 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
             )}
           </div>
 
-          {/* Gallery thumbnails */}
-          {allImages.length > 1 && (
+          {/* Gallery thumbnails — fetched on modal open */}
+          {(allImages.length > 1 || galleryLoading) && (
             <div className="flex gap-2 px-5 pt-3 overflow-x-auto scrollbar-hide">
               {allImages.map((img, i) => {
                 const thumbUrl = img ? getImageUrl(img, 80, 80) : PLACEHOLDER_IMAGE;
@@ -116,6 +148,12 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
                   </button>
                 );
               })}
+              {galleryLoading && (
+                <div className="flex items-center gap-2 px-2">
+                  <div className="w-3 h-3 border-2 border-brand border-t-transparent rounded-full animate-spin" />
+                  <span className="text-[10px] text-[#A8A29E]">Memuat galeri...</span>
+                </div>
+              )}
             </div>
           )}
 

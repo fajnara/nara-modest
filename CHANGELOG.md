@@ -2,6 +2,19 @@
 
 All notable changes to this template.
 
+## [1.6.0] — 2026-06 — Lazy Gallery Loading
+
+### Added
+- `actions/product.js` → `getProductGallery(productId)` server action
+- ProductModal lazy-loads gallery thumbnails when opened
+- Loading spinner shown next to thumbnails while gallery fetches
+- Once gallery arrives, all thumbnails appear without re-rendering modal
+
+### Performance
+- Homepage payload stays minimal (no gallery for every product)
+- Modal still shows full gallery — best of both worlds
+- Skip fetch if product already has gallery data (e.g., from cache/seed)
+
 ## [1.5.0] — 2026-06 — Performance Optimization
 
 ### Performance
