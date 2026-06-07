@@ -192,6 +192,8 @@ export async function updateStoreSettings(data) {
     address: data.address,
     heroTitle: data.heroTitle,
     heroSubtitle: data.heroSubtitle,
+    heroImage: data.heroImage || undefined,
+    heroCtaText: data.heroCtaText,
     promoText: data.promoText,
     primaryColor: data.primaryColor,
     seoTitle: data.seoTitle,

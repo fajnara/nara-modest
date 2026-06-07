@@ -2,6 +2,36 @@
 
 All notable changes to this template.
 
+## [1.7.0] — 2026-06 — UI Polish (Premium Catalog Feel)
+
+### Hero Banner
+- Optional `heroImage` field in Sanity (with hotspot)
+- Optional `heroCtaText` for CTA button (default: "Lihat Koleksi")
+- CTA button now visible (anchors to `#products`)
+- Decorative soft blobs when no image
+- Editorial layout for desktop (wider, larger type, max-w-2xl content)
+- Removed generic "↓ Pilih produk favoritmu di bawah" text
+- Image overlay with mix-blend-multiply for cohesive brand color
+
+### Product Card
+- Image takes the entire card (rounded 2xl), info below outside the surface
+- Quick-add button: 40px diameter (was 28px) → easier touch target
+- Quick-add button placed bottom-right on image (modern e-commerce pattern)
+- Quick-add shows on hover (desktop) / always visible (mobile)
+- Removed always-visible category chip from card (cleaner look)
+- Price uses `text-brand` color for emphasis
+- More breathing room — padding & line-height tuned for fashion feel
+
+### Browsing Section
+- Search + Category combined into single white panel with shadow
+- "Kategori" label added above chips for hierarchy
+- Inactive chips use warm beige (`#F3F0EA`) instead of stark white
+
+### Other
+- Header: height 56→64px, logo 32→40px (more brand presence)
+- EmptyState: smaller subtle icon (was 80px emoji card), more text breathing room
+- Setup Wizard: new heroImage + heroCtaText fields in Steps 1-2
+
 ## [1.6.0] — 2026-06 — Lazy Gallery Loading
 
 ### Added

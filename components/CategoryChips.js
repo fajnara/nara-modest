@@ -5,25 +5,30 @@ export default function CategoryChips({ categories, activeCategory, onCategoryCh
   const chips = [allChip, ...categories];
 
   return (
-    <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1">
-      {chips.map((cat) => {
-        const isActive = activeCategory === cat.slug;
-        return (
-          <button
-            key={cat._id}
-            onClick={() => onCategoryChange(cat.slug)}
-            className={`
-              flex-shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-150
-              ${isActive
-                ? "btn-brand shadow-sm"
-                : "bg-white text-[#737373] border border-[#E5E5E5] hover:border-[var(--brand)] hover:text-brand"
-              }
-            `}
-          >
-            {cat.title}
-          </button>
-        );
-      })}
+    <div>
+      <p className="text-[10px] font-semibold text-[#A8A29E] uppercase tracking-widest mb-2 px-1">
+        Kategori
+      </p>
+      <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1 -mx-1 px-1">
+        {chips.map((cat) => {
+          const isActive = activeCategory === cat.slug;
+          return (
+            <button
+              key={cat._id}
+              onClick={() => onCategoryChange(cat.slug)}
+              className={`
+                flex-shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-150
+                ${isActive
+                  ? "btn-brand shadow-sm"
+                  : "bg-[#F3F0EA] text-[#737373] hover:bg-[#E8E2D9] hover:text-[#171717]"
+                }
+              `}
+            >
+              {cat.title}
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }

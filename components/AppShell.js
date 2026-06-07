@@ -179,18 +179,23 @@ export default function AppShell({ store, categories, products }) {
             <HeroBanner
               heroTitle={store.heroTitle}
               heroSubtitle={store.heroSubtitle}
+              heroImage={store.heroImage}
+              heroCtaText={store.heroCtaText}
               promoText={store.promoText}
             />
-            <div className="px-4 pt-5 pb-2">
-              <SearchBar value={searchQuery} onChange={setSearchQuery} />
+
+            {/* Browsing panel — search + category in one card */}
+            <div id="products" className="px-4 mt-5">
+              <div className="bg-white rounded-2xl border border-[#E5E5E5] p-3 space-y-3 shadow-sm">
+                <SearchBar value={searchQuery} onChange={setSearchQuery} />
+                <CategoryChips
+                  categories={categories}
+                  activeCategory={activeCategory}
+                  onCategoryChange={setActiveCategory}
+                />
+              </div>
             </div>
-            <div className="px-4 pt-3 pb-2">
-              <CategoryChips
-                categories={categories}
-                activeCategory={activeCategory}
-                onCategoryChange={setActiveCategory}
-              />
-            </div>
+
             <div className="px-4 pb-6">
               <ProductGrid
                 products={filteredProducts}
@@ -241,12 +246,15 @@ export default function AppShell({ store, categories, products }) {
             </p>
           </div>
 
-          {/* Hero */}
-          <div className="px-6 pt-5">
+          {/* Hero — editorial variant for desktop */}
+          <div id="products" className="px-6 pt-5">
             <HeroBanner
               heroTitle={store.heroTitle}
               heroSubtitle={store.heroSubtitle}
+              heroImage={store.heroImage}
+              heroCtaText={store.heroCtaText}
               promoText={store.promoText}
+              variant="desktop"
             />
           </div>
 

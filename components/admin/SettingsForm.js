@@ -13,6 +13,7 @@ const FIELDS = [
   { name: "instagramUrl",      label: "URL Instagram",        placeholder: "https://instagram.com/naramodest" },
   { name: "address",           label: "Alamat / Lokasi",      placeholder: "Sampit, Indonesia" },
   { name: "heroTitle",         label: "Judul Hero Banner",    placeholder: "Elegan Setiap Hari" },
+  { name: "heroCtaText",       label: "Teks Tombol Hero",     placeholder: "Lihat Koleksi" },
   { name: "promoText",         label: "Teks Promo (kecil)",   placeholder: "Koleksi baru minggu ini sudah tersedia." },
   { name: "seoTitle",          label: "SEO Title (Google)",   placeholder: "Kosongkan untuk pakai Nama Toko" },
 ];
@@ -26,6 +27,7 @@ export default function SettingsForm({ settings, action }) {
   const [error, setError] = useState("");
   const [primaryColor, setPrimaryColor] = useState(settings.primaryColor || "#8B5E3C");
   const [logo, setLogo] = useState(settings.logo || null);
+  const [heroImage, setHeroImage] = useState(settings.heroImage || null);
 
   const isColorValid = HEX_REGEX.test(primaryColor);
 
@@ -42,6 +44,7 @@ export default function SettingsForm({ settings, action }) {
     const form = new FormData(e.target);
     const data = Object.fromEntries(form.entries());
     data.logo = logo; // attach uploaded logo ref
+    data.heroImage = heroImage; // attach uploaded hero image ref
 
     try {
       await action(data);
@@ -66,6 +69,19 @@ export default function SettingsForm({ settings, action }) {
         />
         <p className="text-[10px] text-[#A8A29E] mt-1">
           Logo tampil di header, sidebar, dan jadi preview saat link di-share.
+        </p>
+      </div>
+
+      {/* Hero image upload */}
+      <div className="max-w-[300px]">
+        <ImageUploader
+          label="Foto Hero Banner"
+          value={heroImage}
+          onChange={setHeroImage}
+          aspectRatio="wide"
+        />
+        <p className="text-[10px] text-[#A8A29E] mt-1">
+          Foto editorial untuk hero. Opsional — kalau kosong pakai gradient saja.
         </p>
       </div>
 

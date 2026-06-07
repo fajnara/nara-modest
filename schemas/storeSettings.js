@@ -61,6 +61,19 @@ export const storeSettingsSchema = {
       rows: 3,
     },
     {
+      name: "heroImage",
+      title: "Foto Hero Banner",
+      type: "image",
+      options: { hotspot: true },
+      description: "Foto editorial untuk hero banner. Opsional — kalau kosong pakai gradient saja.",
+    },
+    {
+      name: "heroCtaText",
+      title: "Teks Tombol Hero",
+      type: "string",
+      description: "Contoh: Lihat Koleksi. Kosongkan untuk hide tombol.",
+    },
+    {
       name: "promoText",
       title: "Teks Promo",
       type: "string",

@@ -33,6 +33,8 @@ export default function SetupWizard({ initialStore, initialCategoryCount, initia
     heroTitle:        initialStore.heroTitle || "",
     heroSubtitle:     initialStore.heroSubtitle || "",
     promoText:        initialStore.promoText || "",
+    heroImage:        initialStore.heroImage || null,
+    heroCtaText:      initialStore.heroCtaText || "",
     seoTitle:         initialStore.seoTitle || "",
     seoDescription:   initialStore.seoDescription || "",
   });
@@ -162,12 +164,18 @@ export default function SetupWizard({ initialStore, initialCategoryCount, initia
                 placeholder="Contoh: Belanja koleksi terbaru langsung via WhatsApp."
                 className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-[#8B5E3C] text-sm outline-none resize-none" />
             </div>
+            <div>
+              <label className="block text-xs font-semibold text-[#171717] mb-1.5">Teks Tombol Hero</label>
+              <input value={data.heroCtaText} onChange={(e) => update("heroCtaText", e.target.value)}
+                placeholder="Contoh: Lihat Koleksi"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-[#8B5E3C] text-sm outline-none" />
+            </div>
           </div>
         )}
 
         {/* ── STEP 2: Logo ── */}
         {step === 2 && (
-          <div className="space-y-4">
+          <div className="space-y-6">
             <div className="max-w-[200px]">
               <ImageUploader
                 label="Logo Toko"
@@ -176,7 +184,17 @@ export default function SetupWizard({ initialStore, initialCategoryCount, initia
               />
               <p className="text-[10px] text-[#A8A29E] mt-1">
                 Logo tampil di header, sidebar, dan jadi preview saat link di-share.
-                Boleh dikosongkan dulu.
+              </p>
+            </div>
+            <div className="max-w-[300px]">
+              <ImageUploader
+                label="Foto Hero Banner"
+                value={data.heroImage}
+                onChange={(v) => update("heroImage", v)}
+                aspectRatio="wide"
+              />
+              <p className="text-[10px] text-[#A8A29E] mt-1">
+                Foto editorial untuk hero. Opsional — kalau kosong pakai gradient.
               </p>
             </div>
           </div>
