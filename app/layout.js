@@ -1,18 +1,25 @@
 import "./globals.css";
 import { cache } from "react";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Plus_Jakarta_Sans, Cormorant_Garamond } from "next/font/google";
 import { sanityClient, isSanityConfigured } from "@/lib/sanity";
 import { STORE_SETTINGS_QUERY } from "@/lib/queries";
 import { DUMMY_STORE } from "@/lib/dummy";
 import { getImageUrl } from "@/lib/image";
 
-// Self-hosted font via next/font — no render-blocking external CSS request.
-// Next.js inlines the font CSS and uses preload hints automatically.
+// Body font — clean, modern sans-serif
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   display: "swap",
   variable: "--font-sans",
+});
+
+// Display font — elegant serif for headlines, store name, hero
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+  variable: "--font-display",
 });
 
 // React cache() dedupes identical calls within a single render
@@ -74,7 +81,7 @@ export async function generateViewport() {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="id" className={plusJakartaSans.variable}>
+    <html lang="id" className={`${plusJakartaSans.variable} ${cormorant.variable}`}>
       <body className="bg-[#F3F0EA] min-h-screen font-sans">
         {children}
       </body>

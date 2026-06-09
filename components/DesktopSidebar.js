@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { ShoppingBag } from "lucide-react";
 import { getImageUrl } from "@/lib/image";
 
 export default function DesktopSidebar({
@@ -16,20 +17,22 @@ export default function DesktopSidebar({
   const logoUrl = store?.logo ? getImageUrl(store.logo, 80, 80) : null;
 
   return (
-    <aside className="hidden md:flex flex-col w-[260px] xl:w-[280px] shrink-0 sticky top-0 h-screen overflow-y-auto border-r border-[#E5E5E5] bg-[#FAFAF8] py-6 px-6">
+    <aside className="hidden md:flex flex-col w-[280px] xl:w-[300px] shrink-0 sticky top-0 h-screen overflow-y-auto border-r border-[#E5E5E5] bg-[#FAFAF8] py-8 px-7">
       {/* Brand */}
-      <div className="mb-6 flex items-center gap-3">
+      <div className="mb-8 flex items-center gap-3">
         {logoUrl && (
-          <div className="relative w-10 h-10 rounded-xl overflow-hidden bg-[#F3F0EA] shrink-0">
-            <Image src={logoUrl} alt="" fill className="object-cover" sizes="40px" />
+          <div className="relative w-12 h-12 rounded-2xl overflow-hidden bg-[#F3F0EA] shrink-0 ring-1 ring-[#E5E5E5]/60">
+            <Image src={logoUrl} alt="" fill className="object-cover" sizes="48px" />
           </div>
         )}
         <div className="min-w-0">
-          <h1 className="text-lg font-bold text-[#171717] leading-tight truncate">
+          <h1 className="heading-display text-xl text-[#171717] leading-tight truncate">
             {storeName}
           </h1>
           {tagline && (
-            <p className="text-xs text-[#737373] mt-0.5 truncate">{tagline}</p>
+            <p className="text-[10px] text-[#737373] tracking-widest uppercase mt-0.5 truncate">
+              {tagline}
+            </p>
           )}
         </div>
       </div>
@@ -37,9 +40,12 @@ export default function DesktopSidebar({
       {/* Cart button */}
       <button
         onClick={onCartOpen}
-        className="flex items-center justify-between w-full px-4 py-2.5 rounded-xl btn-brand text-sm font-semibold transition-colors mb-6"
+        className="flex items-center justify-between w-full px-4 py-3 rounded-2xl btn-brand text-sm font-semibold mb-8 shadow-sm active:scale-[0.98]"
       >
-        <span>Keranjang</span>
+        <span className="flex items-center gap-2">
+          <ShoppingBag className="w-4 h-4" strokeWidth={1.75} />
+          Keranjang
+        </span>
         {totalQty > 0 && (
           <span className="bg-white text-brand text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">
             {totalQty > 99 ? "99+" : totalQty}
@@ -49,7 +55,7 @@ export default function DesktopSidebar({
 
       {/* Categories */}
       <div>
-        <p className="text-[10px] font-semibold text-[#A8A29E] uppercase tracking-widest mb-2 px-1">
+        <p className="text-[10px] font-semibold text-[#A8A29E] uppercase tracking-widest mb-3 px-1">
           Kategori
         </p>
         <nav className="flex flex-col gap-0.5">
@@ -60,26 +66,29 @@ export default function DesktopSidebar({
                 key={cat._id}
                 onClick={() => onCategoryChange(cat.slug)}
                 className={`
-                  text-left px-3 py-2 rounded-lg text-sm font-medium transition-all
+                  text-left px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all
                   ${isActive
-                    ? "bg-[#F3F0EA] text-brand font-semibold"
+                    ? "bg-[var(--brand)]/10 text-brand font-semibold"
                     : "text-[#737373] hover:bg-[#F3F0EA] hover:text-[#171717]"
                   }
                 `}
               >
-                {isActive && (
-                  <span className="inline-block w-1.5 h-1.5 rounded-full bg-brand mr-2 align-middle" />
-                )}
-                {cat.title}
+                <span className="flex items-center gap-2">
+                  {isActive && (
+                    <span className="inline-block w-1 h-1 rounded-full bg-brand" />
+                  )}
+                  <span className={isActive ? "" : "ml-3"}>{cat.title}</span>
+                </span>
               </button>
             );
           })}
         </nav>
       </div>
 
-      {/* Copyright at bottom */}
+      {/* Copyright */}
       <div className="mt-auto pt-6">
-        <p className="text-[10px] text-[#A8A29E]">
+        <div className="w-8 h-px bg-[#E5E5E5] mb-3" />
+        <p className="text-[10px] text-[#A8A29E] tracking-widest uppercase">
           © {new Date().getFullYear()} {storeName}
         </p>
       </div>

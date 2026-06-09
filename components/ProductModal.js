@@ -2,14 +2,12 @@
 
 import { useEffect, useState, useMemo } from "react";
 import Image from "next/image";
+import { X, Plus, Loader2, CheckCircle2 } from "lucide-react";
 import { getImageUrl, PLACEHOLDER_IMAGE } from "@/lib/image";
 import { formatCurrencyShort, getEffectivePrice, hasDiscount } from "@/lib/formatCurrency";
 import { getProductGallery } from "@/actions/product";
-import { X, Plus } from "./icons";
 
 export default function ProductModal({ product, onClose, onAddToCart }) {
-  // Gallery is fetched lazily on modal open (not included in homepage payload).
-  // Initial state seeds with anything already on the product (e.g., from cache).
   const [gallery, setGallery] = useState(
     Array.isArray(product.gallery) ? product.gallery : []
   );
@@ -17,7 +15,6 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
     !Array.isArray(product.gallery)
   );
 
-  // Combine main image + gallery into single array for navigation
   const allImages = useMemo(() => {
     const list = [];
     if (product.image) list.push(product.image);
@@ -30,10 +27,21 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
   const [selectedSize, setSelectedSize] = useState(null);
   const [variantError, setVariantError] = useState("");
 
+  const colors = product.colors || [];
+  const sizes = product.sizes || [];
+  const requiresColor = colors.length > 0;
+  const requiresSize = sizes.length > 0;
+
+  const activeImage = allImages[activeImageIdx];
+  const imageUrl = activeImage ? getImageUrl(activeImage, 800, 800) : null;
+  const displayImage = imageUrl || PLACEHOLDER_IMAGE;
+
+  const effectivePrice = getEffectivePrice(product);
+  const showDiscount = hasDiscount(product);
+
   // Lazy-load gallery on modal open
   useEffect(() => {
     let cancelled = false;
-    // Skip if already have gallery data
     if (Array.isArray(product.gallery)) {
       setGalleryLoading(false);
       return;
@@ -52,19 +60,6 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
     return () => { cancelled = true; };
   }, [product._id, product.gallery]);
 
-  const colors = product.colors || [];
-  const sizes = product.sizes || [];
-  const requiresColor = colors.length > 0;
-  const requiresSize = sizes.length > 0;
-
-  const activeImage = allImages[activeImageIdx];
-  const imageUrl = activeImage ? getImageUrl(activeImage, 600, 600) : null;
-  const displayImage = imageUrl || PLACEHOLDER_IMAGE;
-
-  const effectivePrice = getEffectivePrice(product);
-  const showDiscount = hasDiscount(product);
-
-  // Close on Escape
   useEffect(() => {
     function handleKey(e) { if (e.key === "Escape") onClose(); }
     document.addEventListener("keydown", handleKey);
@@ -94,20 +89,20 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center animate-fade-in">
       <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-[2px]"
+        className="absolute inset-0 bg-black/55 backdrop-blur-[3px]"
         onClick={onClose}
         aria-hidden="true"
       />
 
-      <div className="relative w-full max-w-[480px] md:max-w-[700px] bg-[#FAFAF8] rounded-t-3xl sm:rounded-3xl overflow-hidden max-h-[90vh] flex flex-col animate-[slideUp_0.3s_cubic-bezier(0.32,0.72,0,1)]">
+      <div className="relative w-full max-w-[480px] md:max-w-[720px] bg-[#FAFAF8] rounded-t-3xl sm:rounded-3xl overflow-hidden max-h-[92vh] flex flex-col animate-slide-up shadow-2xl">
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center bg-black/20 hover:bg-black/30 rounded-full text-white transition-colors"
+          className="absolute top-4 right-4 z-10 w-9 h-9 flex items-center justify-center bg-black/25 hover:bg-black/40 backdrop-blur-md rounded-full text-white"
           aria-label="Tutup detail produk"
         >
-          <X className="w-4 h-4" />
+          <X className="w-4 h-4" strokeWidth={2} />
         </button>
 
         <div className="overflow-y-auto flex-1">
@@ -118,59 +113,61 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
               alt={product.name}
               fill
               className="object-cover"
-              sizes="480px"
+              sizes="720px"
               unoptimized={displayImage.includes("placehold.co")}
             />
             {!product.isAvailable && (
-              <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                <span className="bg-white/90 text-[#737373] text-sm font-semibold px-4 py-2 rounded-full">
+              <div className="absolute inset-0 bg-black/40 flex items-center justify-center backdrop-blur-[1px]">
+                <span className="bg-white/95 text-[#171717] text-sm font-semibold px-4 py-2 rounded-full tracking-wide">
                   Stok Habis
                 </span>
               </div>
             )}
           </div>
 
-          {/* Gallery thumbnails — fetched on modal open */}
+          {/* Gallery thumbnails */}
           {(allImages.length > 1 || galleryLoading) && (
-            <div className="flex gap-2 px-5 pt-3 overflow-x-auto scrollbar-hide">
+            <div className="flex gap-2.5 px-6 pt-4 overflow-x-auto scrollbar-hide">
               {allImages.map((img, i) => {
-                const thumbUrl = img ? getImageUrl(img, 80, 80) : PLACEHOLDER_IMAGE;
+                const thumbUrl = img ? getImageUrl(img, 100, 100) : PLACEHOLDER_IMAGE;
                 return (
                   <button
                     key={i}
                     onClick={() => setActiveImageIdx(i)}
-                    className={`relative w-14 h-14 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-all ${
-                      i === activeImageIdx ? "border-brand" : "border-transparent opacity-60 hover:opacity-100"
+                    className={`relative w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 border-2 transition-all ${
+                      i === activeImageIdx
+                        ? "border-brand opacity-100"
+                        : "border-transparent opacity-50 hover:opacity-80"
                     }`}
                   >
-                    <Image src={thumbUrl} alt="" fill className="object-cover" sizes="56px"
+                    <Image src={thumbUrl} alt="" fill className="object-cover" sizes="64px"
                       unoptimized={thumbUrl?.includes("placehold.co")} />
                   </button>
                 );
               })}
               {galleryLoading && (
-                <div className="flex items-center gap-2 px-2">
-                  <div className="w-3 h-3 border-2 border-brand border-t-transparent rounded-full animate-spin" />
-                  <span className="text-[10px] text-[#A8A29E]">Memuat galeri...</span>
+                <div className="flex items-center gap-2 px-2 text-[#A8A29E]">
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" strokeWidth={2} />
+                  <span className="text-[10px]">Memuat...</span>
                 </div>
               )}
             </div>
           )}
 
-          <div className="p-5 pb-4">
+          {/* Details */}
+          <div className="p-6 pb-4">
             {product.category?.title && (
-              <span className="text-xs font-medium text-brand bg-[#F3F0EA] px-2.5 py-1 rounded-full">
+              <span className="inline-block text-[10px] font-semibold text-brand bg-[var(--brand)]/10 px-3 py-1 rounded-full uppercase tracking-widest">
                 {product.category.title}
               </span>
             )}
 
-            <h2 className="mt-3 text-xl font-bold text-[#171717] leading-snug">
+            <h2 className="heading-display mt-4 text-2xl md:text-3xl text-[#171717] leading-tight">
               {product.name}
             </h2>
 
-            {/* Price */}
-            <div className="mt-1 flex items-baseline gap-2">
-              <p className="text-xl font-bold text-brand tabular-nums">
+            <div className="mt-3 flex items-baseline gap-2.5">
+              <p className="text-2xl font-bold text-brand tabular-nums tracking-tight">
                 {formatCurrencyShort(effectivePrice)}
               </p>
               {showDiscount && (
@@ -181,31 +178,33 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
             </div>
 
             {product.material && (
-              <p className="mt-2 text-xs text-[#737373]">
-                <span className="font-semibold">Bahan:</span> {product.material}
+              <p className="mt-4 text-xs text-[#737373] tracking-wide">
+                <span className="font-semibold uppercase">Bahan:</span> {product.material}
               </p>
             )}
 
             {product.description && (
-              <p className="mt-3 text-sm text-[#737373] leading-relaxed">
+              <p className="mt-4 text-sm text-[#737373] leading-relaxed">
                 {product.description}
               </p>
             )}
 
             {/* Colors */}
             {colors.length > 0 && (
-              <div className="mt-4">
-                <p className="text-xs font-semibold text-[#171717] mb-2">
-                  Warna {selectedColor && <span className="text-[#737373] font-normal">· {selectedColor}</span>}
+              <div className="mt-6">
+                <p className="text-[10px] font-semibold text-[#171717] uppercase tracking-widest mb-3">
+                  Warna {selectedColor && (
+                    <span className="text-[#737373] font-normal normal-case tracking-normal ml-1">· {selectedColor}</span>
+                  )}
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {colors.map((color) => (
                     <button
                       key={color}
                       onClick={() => { setSelectedColor(color); setVariantError(""); }}
-                      className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${
+                      className={`px-4 py-2 rounded-full text-xs font-medium border ${
                         selectedColor === color
-                          ? "bg-brand text-white border-[var(--brand)]"
+                          ? "btn-brand border-[var(--brand)]"
                           : "bg-white text-[#171717] border-[#E5E5E5] hover:border-[var(--brand)]"
                       }`}
                     >
@@ -218,18 +217,20 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
 
             {/* Sizes */}
             {sizes.length > 0 && (
-              <div className="mt-4">
-                <p className="text-xs font-semibold text-[#171717] mb-2">
-                  Ukuran {selectedSize && <span className="text-[#737373] font-normal">· {selectedSize}</span>}
+              <div className="mt-5">
+                <p className="text-[10px] font-semibold text-[#171717] uppercase tracking-widest mb-3">
+                  Ukuran {selectedSize && (
+                    <span className="text-[#737373] font-normal normal-case tracking-normal ml-1">· {selectedSize}</span>
+                  )}
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {sizes.map((size) => (
                     <button
                       key={size}
                       onClick={() => { setSelectedSize(size); setVariantError(""); }}
-                      className={`min-w-[44px] px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
+                      className={`min-w-[52px] px-4 py-2 rounded-xl text-xs font-bold border ${
                         selectedSize === size
-                          ? "bg-brand text-white border-[var(--brand)]"
+                          ? "btn-brand border-[var(--brand)]"
                           : "bg-white text-[#171717] border-[#E5E5E5] hover:border-[var(--brand)]"
                       }`}
                     >
@@ -240,27 +241,35 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
               </div>
             )}
 
-            <div className="mt-4 flex items-center gap-2">
-              <span className={`w-2 h-2 rounded-full ${product.isAvailable ? "bg-green-500" : "bg-red-400"}`} />
-              <span className="text-xs text-[#737373]">
-                {product.isAvailable ? "Tersedia" : "Stok Habis"}
-              </span>
+            <div className="mt-6 flex items-center gap-2">
+              {product.isAvailable ? (
+                <>
+                  <CheckCircle2 className="w-3.5 h-3.5 text-green-600" strokeWidth={2} />
+                  <span className="text-xs text-[#737373] tracking-wide">Tersedia</span>
+                </>
+              ) : (
+                <>
+                  <X className="w-3.5 h-3.5 text-red-500" strokeWidth={2.5} />
+                  <span className="text-xs text-[#737373] tracking-wide">Stok Habis</span>
+                </>
+              )}
             </div>
           </div>
         </div>
 
-        <div className="p-4 border-t border-[#E5E5E5] bg-[#FAFAF8] space-y-2">
+        {/* Sticky CTA */}
+        <div className="p-5 border-t border-[#E5E5E5] bg-[#FAFAF8]/95 backdrop-blur space-y-2.5">
           {variantError && (
-            <p className="text-xs text-amber-700 bg-amber-50 px-3 py-2 rounded-lg text-center">
+            <p className="text-xs text-amber-800 bg-amber-50 border border-amber-200 px-3 py-2 rounded-xl text-center">
               {variantError}
             </p>
           )}
           <button
             onClick={handleAdd}
             disabled={!product.isAvailable}
-            className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl btn-brand font-semibold text-sm disabled:opacity-40 disabled:cursor-not-allowed transition-colors active:scale-[0.98]"
+            className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl btn-brand font-semibold text-sm disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.98] shadow-sm"
           >
-            <Plus className="w-4 h-4" />
+            <Plus className="w-4 h-4" strokeWidth={2.5} />
             {product.isAvailable ? "Tambah ke Keranjang" : "Stok Habis"}
           </button>
         </div>

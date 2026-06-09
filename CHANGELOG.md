@@ -2,6 +2,51 @@
 
 All notable changes to this template.
 
+## [1.8.0] — 2026-06 — Premium Polish Pass
+
+### Typography
+- Added Cormorant Garamond as display font (via next/font)
+- `heading-display` utility for hero, brand, modal headings
+- Refined letter-spacing, line-height across heading sizes
+- Plus Jakarta Sans (body) refined with `text-rendering: optimizeLegibility`
+
+### Icons — Professional Lucide
+- Migrated all icons to `lucide-react` (tree-shakeable, ~1kB each)
+- Consistent stroke width (1.5–2.5 depending on emphasis)
+- WhatsApp brand icon kept inline (lucide doesn't ship brand icons)
+- Replaced emoji icons in EmptyState, AdminNav, Dashboard
+
+### Footer (Premium Redesign)
+- Centered brand block with logo, store name (display font), tagline
+- Brand accent line under tagline
+- Refined contact links with lucide icons, hover states
+- Bottom row: copyright · "Made with ♥ in Indonesia" · Admin link
+- Top border replaced with subtle gradient divider
+- Generous vertical spacing (py-12)
+
+### Admin Theming — Brand Color Sync
+- New `BrandColorProvider` component injects `--brand` + `--brand-dark` CSS vars
+- Admin layout fetches `primaryColor` from store settings and applies globally
+- Admin sidebar nav uses `bg-[var(--brand)]/10 text-brand` for active state
+- Admin dashboard stats cards, CTAs, accents all sync to store color
+- When owner changes color in settings → entire admin instantly reflects it
+
+### Premium Animations
+- New keyframes: `fadeIn`, `fadeInUp`, `slideUp`, `slideInRight`, `shimmer`
+- `stagger-fade-in` utility applied to product grid (cards reveal sequentially)
+- Hero title/subtitle/CTA fade-in-up with staggered delays (0, 100, 200, 300ms)
+- ProductCard image scale on hover with 700ms ease-out
+- Quick-add button slides up + fades in on desktop hover
+- `prefers-reduced-motion` respected — all animations disabled
+
+### Whitespace & Polish
+- Header height 64px, generous padding
+- Hero padding 7→9 (mobile), 12→16 (desktop)
+- ProductCard pt-3.5 below image
+- Modal padding 6 (was 5), thumbnail size 16x16 (was 14x14)
+- Cart drawer width 480 → 440 (desktop, less cluttered)
+- All buttons refined to active:scale-[0.98] for tactile feedback
+
 ## [1.7.0] — 2026-06 — UI Polish (Premium Catalog Feel)
 
 ### Hero Banner

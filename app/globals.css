@@ -1,4 +1,4 @@
-/* Font loaded via next/font in app/layout.js — self-hosted + zero render-blocking */
+/* Fonts loaded via next/font in app/layout.js — zero render-blocking */
 
 @tailwind base;
 @tailwind components;
@@ -10,19 +10,6 @@
   --color-app-bg: #FAFAF8;
   --color-outer-bg: #F3F0EA;
 }
-
-/* Brand color utilities — uses CSS variable injected by AppShell */
-.btn-brand {
-  background-color: var(--brand);
-  color: white;
-}
-.btn-brand:hover {
-  background-color: var(--brand-dark);
-}
-.text-brand { color: var(--brand); }
-.bg-brand { background-color: var(--brand); }
-.border-brand { border-color: var(--brand); }
-.ring-brand { --tw-ring-color: var(--brand); }
 
 * {
   box-sizing: border-box;
@@ -38,6 +25,42 @@ body {
   color: #171717;
   font-family: var(--font-sans), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Premium typography ─────────────────────────────────── */
+.font-display {
+  font-family: var(--font-display), Georgia, serif;
+  font-feature-settings: "liga" 1, "kern" 1;
+  letter-spacing: -0.01em;
+}
+
+.heading-display {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+/* Brand color utilities — uses CSS variable injected by AppShell */
+.btn-brand {
+  background-color: var(--brand);
+  color: white;
+  transition: background-color 200ms ease, transform 150ms ease, box-shadow 200ms ease;
+}
+.btn-brand:hover {
+  background-color: var(--brand-dark);
+}
+.text-brand { color: var(--brand); }
+.bg-brand { background-color: var(--brand); }
+.border-brand { border-color: var(--brand); }
+.ring-brand { --tw-ring-color: var(--brand); }
+
+/* Subtle brand tint for backgrounds */
+.bg-brand-soft {
+  background-color: var(--brand);
+  opacity: 0.08;
 }
 
 /* Hide scrollbar but keep functionality */
@@ -49,15 +72,6 @@ body {
   display: none;
 }
 
-/* Smooth bottom sheet transitions */
-.sheet-enter {
-  transform: translateY(100%);
-}
-.sheet-enter-active {
-  transform: translateY(0);
-  transition: transform 300ms cubic-bezier(0.32, 0.72, 0, 1);
-}
-
 /* Line clamp utilities */
 .line-clamp-2 {
   display: -webkit-box;
@@ -66,22 +80,16 @@ body {
   overflow: hidden;
 }
 
-/* Focus visible ring — uses CSS variable so it adapts to store's primary color */
+/* Focus visible ring — adaptive to brand color */
 :focus-visible {
   outline: 2px solid var(--brand);
   outline-offset: 2px;
 }
 
-/* Slide up animation for modal/drawer */
+/* Animations ─────────────────────────────────────────── */
 @keyframes slideUp {
-  from {
-    transform: translateY(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
 @keyframes fadeIn {
@@ -89,14 +97,49 @@ body {
   to { opacity: 1; }
 }
 
-/* Slide in from right — for desktop side drawer */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 @keyframes slideInRight {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes shimmer {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Stagger reveal for product grid — pure CSS, no JS */
+.stagger-fade-in > * {
+  opacity: 0;
+  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.stagger-fade-in > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-fade-in > *:nth-child(2) { animation-delay: 50ms; }
+.stagger-fade-in > *:nth-child(3) { animation-delay: 100ms; }
+.stagger-fade-in > *:nth-child(4) { animation-delay: 150ms; }
+.stagger-fade-in > *:nth-child(5) { animation-delay: 200ms; }
+.stagger-fade-in > *:nth-child(6) { animation-delay: 250ms; }
+.stagger-fade-in > *:nth-child(7) { animation-delay: 300ms; }
+.stagger-fade-in > *:nth-child(8) { animation-delay: 350ms; }
+.stagger-fade-in > *:nth-child(n+9) { animation-delay: 400ms; }
+
+/* Refined transitions across all interactive elements */
+button,
+a {
+  transition-property: color, background-color, border-color, opacity, transform, box-shadow;
+  transition-duration: 200ms;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Reduce motion respect */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
+  html { scroll-behavior: auto; }
 }

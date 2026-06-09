@@ -12,6 +12,7 @@ import DesktopSidebar from "./DesktopSidebar";
 import SearchBar from "./SearchBar";
 import ToastContainer, { useToast } from "./Toast";
 import { darkenHex } from "@/lib/colorUtils";
+// BrandColorProvider equivalent is inlined below via style prop.
 
 const CART_STORAGE_KEY = "nara-modest-cart";
 
