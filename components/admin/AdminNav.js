@@ -11,6 +11,7 @@ import {
   Tags,
   Settings,
   Users,
+  UserCircle,
   ExternalLink,
   LogOut,
   Menu,
@@ -24,6 +25,7 @@ const ALL_NAV_ITEMS = [
   { href: "/admin/categories", label: "Kategori",        Icon: Tags },
   { href: "/admin/settings",   label: "Pengaturan",      Icon: Settings },
   { href: "/admin/users",      label: "Users",           Icon: Users, superadminOnly: true },
+  { href: "/admin/account",    label: "Akun Saya",       Icon: UserCircle },
 ];
 
 export default function AdminNav({ user }) {

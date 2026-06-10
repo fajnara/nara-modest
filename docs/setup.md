@@ -163,6 +163,32 @@ npm run dev
 
 ---
 
+## Lupa Password Admin
+
+Ada **3 cara** reset password:
+
+### 1. Via Admin Panel (paling cepat — kalau ada superadmin lain)
+
+- Login sebagai superadmin lain → buka `/admin/users` → klik **Edit** di user yang lupa password → isi password baru → Simpan.
+
+### 2. Via Akun Saya (kalau masih bisa login)
+
+Setelah login, buka `/admin/account` → masukkan password lama → set password baru.
+
+### 3. Via Terminal (kalau tidak ada akses admin panel)
+
+```bash
+# Windows PowerShell
+$env:ADMIN_EMAIL="admin@toko.com"; $env:ADMIN_PASSWORD="passwordBaru123"; npm run reset-password
+
+# macOS / Linux
+ADMIN_EMAIL=admin@toko.com ADMIN_PASSWORD="passwordBaru123" npm run reset-password
+```
+
+Cocok untuk pemilik server / developer kalau **semua superadmin lupa password sekaligus**.
+
+---
+
 ## Troubleshooting
 
 Lihat [docs/troubleshooting.md](./troubleshooting.md) untuk error umum.

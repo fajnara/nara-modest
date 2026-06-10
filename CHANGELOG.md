@@ -2,6 +2,24 @@
 
 All notable changes to this template.
 
+## [1.9.0] — 2026-06 — Password Recovery
+
+### Added
+- **CLI reset script** `npm run reset-password` for forgotten passwords
+  - Same password rules as create-admin (min 10, letter+digit, ≠ email)
+  - Works even if all superadmins lose access
+- **"Lupa password?" link** on login page with modal explaining options
+- **/admin/account page** — self-service password change for any logged-in user
+  - Verifies old password before allowing change
+  - Server validates new password against same policy (validators.js)
+  - Prevents reusing the same password
+- **AdminNav** has new "Akun Saya" entry
+- Documentation updated with 3-way recovery flow
+
+### Security
+- `updateOwnPassword` server action requires current password verification
+- New password validated server-side via `validatePassword()` helper
+
 ## [1.8.0] — 2026-06 — Premium Polish Pass
 
 ### Typography

@@ -290,6 +290,38 @@ export async function updateAdminUser(id, data) {
   revalidatePath("/admin/users");
 }
 
+/**
+ * Self-service password change for the currently logged-in user.
+ * Verifies the old password first to prevent session hijack abuse.
+ */
+export async function updateOwnPassword({ currentPassword, newPassword }) {
+  const currentUser = await requireAdmin();
+
+  if (!currentPassword) throw new Error("Password lama wajib diisi");
+
+  const dbUser = await adminClient.fetch(
+    `*[_type == "adminUser" && _id == $id][0]{ _id, email, passwordHash }`,
+    { id: currentUser.id }
+  );
+  if (!dbUser?.passwordHash) throw new Error("User tidak ditemukan");
+
+  const isValid = await bcrypt.compare(currentPassword, dbUser.passwordHash);
+  if (!isValid) throw new Error("Password lama salah");
+
+  // Validate new password via the same rules used elsewhere
+  const { validatePassword } = await import("@/lib/validators");
+  validatePassword(newPassword, dbUser.email);
+
+  // Don't allow same as current
+  const isSame = await bcrypt.compare(newPassword, dbUser.passwordHash);
+  if (isSame) throw new Error("Password baru harus berbeda dari password lama");
+
+  const passwordHash = await bcrypt.hash(newPassword, 12);
+  await adminClient.patch(currentUser.id).set({ passwordHash }).commit();
+
+  return { success: true };
+}
+
 export async function deleteAdminUser(id) {
   const currentUser = await requireSuperAdmin();
   if (!id) throw new Error("ID user tidak valid");
