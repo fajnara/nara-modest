@@ -89,7 +89,7 @@ export default function SettingsForm({ settings, action }) {
         <div key={f.name}>
           <label className="block text-xs font-semibold text-[#171717] mb-1.5">{f.label}</label>
           <input name={f.name} defaultValue={settings[f.name] || ""} placeholder={f.placeholder}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-[#8B5E3C] text-sm outline-none bg-[#FAFAF8]" />
+            className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-brand text-sm outline-none bg-[#FAFAF8]" />
           {f.help && <p className="text-[10px] text-[#A8A29E] mt-1">{f.help}</p>}
         </div>
       ))}
@@ -110,21 +110,21 @@ export default function SettingsForm({ settings, action }) {
         <label className="block text-xs font-semibold text-[#171717] mb-1.5">Subjudul Hero Banner</label>
         <textarea name="heroSubtitle" defaultValue={settings.heroSubtitle || ""} rows={3}
           placeholder="Belanja koleksi hijab dan modest wear terbaru langsung via WhatsApp."
-          className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-[#8B5E3C] text-sm outline-none bg-[#FAFAF8] resize-none" />
+          className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-brand text-sm outline-none bg-[#FAFAF8] resize-none" />
       </div>
 
       <div>
         <label className="block text-xs font-semibold text-[#171717] mb-1.5">SEO Description</label>
         <textarea name="seoDescription" defaultValue={settings.seoDescription || ""} rows={2}
           placeholder="Deskripsi singkat untuk Google & media sosial."
-          className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-[#8B5E3C] text-sm outline-none bg-[#FAFAF8] resize-none" />
+          className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-brand text-sm outline-none bg-[#FAFAF8] resize-none" />
       </div>
 
       {error && <p className="text-xs text-red-500 bg-red-50 px-3 py-2 rounded-lg">{error}</p>}
       {saved && <p className="text-xs text-green-600 bg-green-50 px-3 py-2 rounded-lg">✓ Perubahan disimpan</p>}
 
       <button type="submit" disabled={loading}
-        className="px-6 py-2.5 rounded-xl bg-[#8B5E3C] text-white text-sm font-semibold hover:bg-[#5C3A24] transition-colors disabled:opacity-50">
+        className="px-6 py-2.5 rounded-xl btn-brand text-sm font-semibold disabled:opacity-50">
         {loading ? "Menyimpan..." : "Simpan Perubahan"}
       </button>
     </form>

@@ -6,7 +6,8 @@ import { getImageUrl, PLACEHOLDER_IMAGE } from "@/lib/image";
 import { formatCurrencyShort, getEffectivePrice, hasDiscount } from "@/lib/formatCurrency";
 
 export default function ProductCard({ product, onCardClick, onAddToCart }) {
-  const imageUrl = product.image ? getImageUrl(product.image, 400, 500) : null;
+  // Request 800x1000 — covers retina display at 2-column (400px wide cards)
+  const imageUrl = product.image ? getImageUrl(product.image, 800, 1000) : null;
   const displayImage = imageUrl || PLACEHOLDER_IMAGE;
 
   const effectivePrice = getEffectivePrice(product);
@@ -31,7 +32,7 @@ export default function ProductCard({ product, onCardClick, onAddToCart }) {
           fill
           className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
           sizes="(max-width: 480px) 50vw, (max-width: 1024px) 33vw, 240px"
-          quality={75}
+          quality={85}
           loading="lazy"
           unoptimized={displayImage.includes("placehold.co")}
         />

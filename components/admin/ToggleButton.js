@@ -17,7 +17,7 @@ export default function ToggleButton({ id, value, action }) {
   return (
     <button onClick={handleToggle} disabled={isPending}
       className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${
-        value ? "bg-[#8B5E3C]" : "bg-[#E5E5E5]"
+        value ? "bg-brand" : "bg-[#E5E5E5]"
       } disabled:opacity-50`}
       aria-label={value ? "Tersedia" : "Tidak tersedia"}
     >

@@ -3,7 +3,7 @@
 import { adminClient } from "@/lib/sanity-admin";
 import { requireAdmin } from "@/lib/adminAuth";
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB — supports high-resolution uploads
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 
 /**
@@ -26,7 +26,7 @@ export async function uploadImage(formData) {
     throw new Error("Format harus JPG, PNG, WEBP, atau GIF");
   }
   if (file.size > MAX_FILE_SIZE) {
-    throw new Error(`Ukuran file maksimal 5 MB (sekarang ${(file.size / 1024 / 1024).toFixed(1)} MB)`);
+    throw new Error(`Ukuran file maksimal 10 MB (sekarang ${(file.size / 1024 / 1024).toFixed(1)} MB)`);
   }
 
   const buffer = Buffer.from(await file.arrayBuffer());

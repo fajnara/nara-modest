@@ -1,10 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Hide "X-Powered-By: Next.js" header for slight security obscurity
   poweredByHeader: false,
-  // Tighter cross-origin policy
   reactStrictMode: true,
   images: {
+    // Optimal sizes for catalog cards and modals — covers 1x and 2x retina
+    deviceSizes: [640, 750, 828, 1080, 1200, 1600, 1920, 2048],
+    imageSizes: [16, 32, 48, 64, 96, 128, 200, 256, 384, 512],
+    // Prefer modern formats — browsers auto-negotiate
+    formats: ["image/avif", "image/webp"],
     remotePatterns: [
       {
         protocol: "https",
@@ -18,9 +21,8 @@ const nextConfig = {
     ],
   },
   experimental: {
-    // Allow Server Actions to receive larger payloads (image uploads up to 5MB)
     serverActions: {
-      bodySizeLimit: "6mb",
+      bodySizeLimit: "10mb", // raised — supports higher-res image uploads
     },
   },
 };

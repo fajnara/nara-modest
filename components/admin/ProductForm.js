@@ -85,13 +85,13 @@ export default function ProductForm({ product, categories, action }) {
           Nama Produk <span className="text-red-500">*</span>
         </label>
         <input name="name" defaultValue={product?.name} required
-          className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-[#8B5E3C] text-sm outline-none bg-white" />
+          className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-brand text-sm outline-none bg-white" />
       </div>
 
       <div>
         <label className="block text-xs font-semibold text-[#171717] mb-1.5">Kategori</label>
         <select name="categoryId" defaultValue={product?.category?._ref || product?.category?._id || ""}
-          className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-[#8B5E3C] text-sm outline-none bg-white">
+          className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-brand text-sm outline-none bg-white">
           <option value="">— Tanpa Kategori —</option>
           {categories.map((c) => (
             <option key={c._id} value={c._id}>{c.title}</option>
@@ -106,13 +106,13 @@ export default function ProductForm({ product, categories, action }) {
           </label>
           <input name="price" type="number" defaultValue={product?.price} required min="0"
             placeholder="75000"
-            className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-[#8B5E3C] text-sm outline-none bg-white" />
+            className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-brand text-sm outline-none bg-white" />
         </div>
         <div>
           <label className="block text-xs font-semibold text-[#171717] mb-1.5">Harga Diskon (Rp)</label>
           <input name="discountPrice" type="number" defaultValue={product?.discountPrice ?? ""} min="0"
             placeholder="Opsional"
-            className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-[#8B5E3C] text-sm outline-none bg-white" />
+            className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-brand text-sm outline-none bg-white" />
         </div>
       </div>
 
@@ -120,21 +120,21 @@ export default function ProductForm({ product, categories, action }) {
         <label className="block text-xs font-semibold text-[#171717] mb-1.5">Deskripsi</label>
         <textarea name="description" defaultValue={product?.description} rows={4}
           placeholder="Deskripsi produk..."
-          className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-[#8B5E3C] text-sm outline-none bg-white resize-none" />
+          className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-brand text-sm outline-none bg-white resize-none" />
       </div>
 
       <div>
         <label className="block text-xs font-semibold text-[#171717] mb-1.5">Bahan / Material</label>
         <input name="material" defaultValue={product?.material || ""}
           placeholder="Contoh: Voal Premium, Crepe, Linen"
-          className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-[#8B5E3C] text-sm outline-none bg-white" />
+          className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-brand text-sm outline-none bg-white" />
       </div>
 
       <div>
         <label className="block text-xs font-semibold text-[#171717] mb-1.5">Pilihan Warna</label>
         <input name="colors" defaultValue={(product?.colors || []).join(", ")}
           placeholder="Pisahkan dengan koma. Contoh: Hitam, Putih, Cream"
-          className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-[#8B5E3C] text-sm outline-none bg-white" />
+          className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-brand text-sm outline-none bg-white" />
         <p className="text-[10px] text-[#A8A29E] mt-1">Kosongkan jika produk tidak punya pilihan warna.</p>
       </div>
 
@@ -142,27 +142,27 @@ export default function ProductForm({ product, categories, action }) {
         <label className="block text-xs font-semibold text-[#171717] mb-1.5">Pilihan Ukuran</label>
         <input name="sizes" defaultValue={(product?.sizes || []).join(", ")}
           placeholder="Pisahkan dengan koma. Contoh: S, M, L, XL atau All Size"
-          className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-[#8B5E3C] text-sm outline-none bg-white" />
+          className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-brand text-sm outline-none bg-white" />
         <p className="text-[10px] text-[#A8A29E] mt-1">Kosongkan jika produk tidak punya pilihan ukuran.</p>
       </div>
 
       <div>
         <label className="block text-xs font-semibold text-[#171717] mb-1.5">Urutan Tampil</label>
         <input name="sortOrder" type="number" defaultValue={product?.sortOrder ?? 99} min="1"
-          className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-[#8B5E3C] text-sm outline-none bg-white" />
+          className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-brand text-sm outline-none bg-white" />
       </div>
 
       <div className="flex gap-6">
         <label className="flex items-center gap-2 cursor-pointer">
           <input name="isAvailable" type="checkbox"
             defaultChecked={product ? product.isAvailable : true}
-            className="w-4 h-4 accent-[#8B5E3C]" />
+            className="w-4 h-4 accent-[var(--brand)]" />
           <span className="text-sm text-[#171717]">Tersedia</span>
         </label>
         <label className="flex items-center gap-2 cursor-pointer">
           <input name="isFeatured" type="checkbox"
             defaultChecked={product?.isFeatured ?? false}
-            className="w-4 h-4 accent-[#8B5E3C]" />
+            className="w-4 h-4 accent-[var(--brand)]" />
           <span className="text-sm text-[#171717]">Produk Unggulan</span>
         </label>
       </div>
@@ -173,7 +173,7 @@ export default function ProductForm({ product, categories, action }) {
 
       <div className="flex gap-3 pt-2">
         <button type="submit" disabled={loading}
-          className="px-6 py-2.5 rounded-xl bg-[#8B5E3C] text-white text-sm font-semibold hover:bg-[#5C3A24] transition-colors disabled:opacity-50">
+          className="px-6 py-2.5 rounded-xl btn-brand text-sm font-semibold disabled:opacity-50">
           {loading ? "Menyimpan..." : product ? "Simpan Perubahan" : "Tambah Produk"}
         </button>
         <button type="button" onClick={() => router.back()}

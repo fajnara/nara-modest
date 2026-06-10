@@ -110,7 +110,7 @@ export default function ImageUploader({ value, onChange, label, aspectRatio = "s
           >
             <div className="text-3xl">📷</div>
             <p className="text-sm font-medium text-[#171717]">Klik atau drag foto ke sini</p>
-            <p className="text-[10px] text-[#A8A29E]">JPG, PNG, WEBP — Maks 5 MB</p>
+            <p className="text-[10px] text-[#A8A29E]">JPG, PNG, WEBP — Maks 10 MB</p>
           </button>
         )}
       </div>

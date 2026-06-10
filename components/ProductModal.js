@@ -3,7 +3,7 @@
 import { useEffect, useState, useMemo } from "react";
 import Image from "next/image";
 import { X, Plus, Loader2, CheckCircle2 } from "lucide-react";
-import { getImageUrl, PLACEHOLDER_IMAGE } from "@/lib/image";
+import { getImageUrl, getImageUrlHQ, PLACEHOLDER_IMAGE } from "@/lib/image";
 import { formatCurrencyShort, getEffectivePrice, hasDiscount } from "@/lib/formatCurrency";
 import { getProductGallery } from "@/actions/product";
 
@@ -33,7 +33,9 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
   const requiresSize = sizes.length > 0;
 
   const activeImage = allImages[activeImageIdx];
-  const imageUrl = activeImage ? getImageUrl(activeImage, 800, 800) : null;
+  // Modal can show up to 720px wide on desktop, 480 on mobile. Request 1600px
+  // wide so it stays sharp on retina (2x) without horizontal cropping.
+  const imageUrl = activeImage ? getImageUrlHQ(activeImage, 1600) : null;
   const displayImage = imageUrl || PLACEHOLDER_IMAGE;
 
   const effectivePrice = getEffectivePrice(product);
@@ -113,7 +115,8 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
               alt={product.name}
               fill
               className="object-cover"
-              sizes="720px"
+              sizes="(max-width: 768px) 100vw, 720px"
+              quality={95}
               unoptimized={displayImage.includes("placehold.co")}
             />
             {!product.isAvailable && (

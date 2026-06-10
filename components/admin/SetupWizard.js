@@ -88,7 +88,7 @@ export default function SetupWizard({ initialStore, initialCategoryCount, initia
   return (
     <div className="max-w-2xl mx-auto">
       <div className="mb-6">
-        <Link href="/admin" className="text-xs text-[#737373] hover:text-[#8B5E3C]">
+        <Link href="/admin" className="text-xs text-[#737373] hover:text-brand">
           ← Kembali ke Dashboard
         </Link>
         <h1 className="text-2xl font-bold text-[#171717] mt-2">Setup Wizard</h1>
@@ -107,7 +107,7 @@ export default function SetupWizard({ initialStore, initialCategoryCount, initia
                   s.id < step
                     ? "bg-green-500 text-white"
                     : s.id === step
-                    ? "bg-[#8B5E3C] text-white ring-4 ring-[#F3F0EA]"
+                    ? "btn-brand ring-4 ring-[#F3F0EA]"
                     : "bg-[#E5E5E5] text-[#A8A29E]"
                 }`}
               >
@@ -121,7 +121,7 @@ export default function SetupWizard({ initialStore, initialCategoryCount, initia
         </div>
         <div className="h-1 bg-[#E5E5E5] rounded-full overflow-hidden">
           <div
-            className="h-full bg-[#8B5E3C] transition-all duration-300"
+            className="h-full bg-brand transition-all duration-300"
             style={{ width: `${((step - 1) / (STEPS.length - 1)) * 100}%` }}
           />
         </div>
@@ -141,13 +141,13 @@ export default function SetupWizard({ initialStore, initialCategoryCount, initia
               </label>
               <input value={data.storeName} onChange={(e) => update("storeName", e.target.value)}
                 placeholder="Contoh: Nara Modest"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-[#8B5E3C] text-sm outline-none" />
+                className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-brand text-sm outline-none" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-[#171717] mb-1.5">Tagline</label>
               <input value={data.storeTagline} onChange={(e) => update("storeTagline", e.target.value)}
                 placeholder="Contoh: Modest Wear Catalog"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-[#8B5E3C] text-sm outline-none" />
+                className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-brand text-sm outline-none" />
               <p className="text-[10px] text-[#A8A29E] mt-1">
                 Kalimat singkat di bawah nama toko. Bisa dikosongkan.
               </p>
@@ -156,19 +156,19 @@ export default function SetupWizard({ initialStore, initialCategoryCount, initia
               <label className="block text-xs font-semibold text-[#171717] mb-1.5">Judul Hero Banner</label>
               <input value={data.heroTitle} onChange={(e) => update("heroTitle", e.target.value)}
                 placeholder="Contoh: Elegan Setiap Hari"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-[#8B5E3C] text-sm outline-none" />
+                className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-brand text-sm outline-none" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-[#171717] mb-1.5">Subjudul Hero Banner</label>
               <textarea value={data.heroSubtitle} onChange={(e) => update("heroSubtitle", e.target.value)} rows={2}
                 placeholder="Contoh: Belanja koleksi terbaru langsung via WhatsApp."
-                className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-[#8B5E3C] text-sm outline-none resize-none" />
+                className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-brand text-sm outline-none resize-none" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-[#171717] mb-1.5">Teks Tombol Hero</label>
               <input value={data.heroCtaText} onChange={(e) => update("heroCtaText", e.target.value)}
                 placeholder="Contoh: Lihat Koleksi"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-[#8B5E3C] text-sm outline-none" />
+                className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-brand text-sm outline-none" />
             </div>
           </div>
         )}
@@ -209,7 +209,7 @@ export default function SetupWizard({ initialStore, initialCategoryCount, initia
               </label>
               <input value={data.whatsappNumber} onChange={(e) => update("whatsappNumber", e.target.value)}
                 placeholder="6281234567890"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-[#8B5E3C] text-sm outline-none" />
+                className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-brand text-sm outline-none" />
               <p className="text-[10px] text-[#A8A29E] mt-1">
                 Format: 62xxxxxxxxxx (tanpa + atau spasi). Pesanan akan masuk ke nomor ini.
               </p>
@@ -218,19 +218,19 @@ export default function SetupWizard({ initialStore, initialCategoryCount, initia
               <label className="block text-xs font-semibold text-[#171717] mb-1.5">Username Instagram</label>
               <input value={data.instagramUsername} onChange={(e) => update("instagramUsername", e.target.value)}
                 placeholder="naramodest (tanpa @)"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-[#8B5E3C] text-sm outline-none" />
+                className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-brand text-sm outline-none" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-[#171717] mb-1.5">URL Instagram</label>
               <input value={data.instagramUrl} onChange={(e) => update("instagramUrl", e.target.value)}
                 placeholder="https://instagram.com/naramodest"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-[#8B5E3C] text-sm outline-none" />
+                className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-brand text-sm outline-none" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-[#171717] mb-1.5">Alamat / Lokasi</label>
               <input value={data.address} onChange={(e) => update("address", e.target.value)}
                 placeholder="Contoh: Sampit, Indonesia"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-[#8B5E3C] text-sm outline-none" />
+                className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E5E5] focus:border-brand text-sm outline-none" />
             </div>
           </div>
         )}
@@ -257,7 +257,7 @@ export default function SetupWizard({ initialStore, initialCategoryCount, initia
                 {initialCategoryCount > 0 ? "Edit Kategori" : "Tambah Kategori"}
               </Link>
               <Link href="/admin/products/new"
-                className="px-4 py-3 rounded-xl bg-[#8B5E3C] text-white text-sm font-semibold hover:bg-[#5C3A24] transition-colors">
+                className="px-4 py-3 rounded-xl btn-brand text-sm font-semibold  transition-colors">
                 + Tambah Produk
               </Link>
               <Link href="/admin"
@@ -279,14 +279,14 @@ export default function SetupWizard({ initialStore, initialCategoryCount, initia
           <button
             onClick={handlePrev}
             disabled={step === 1 || saving}
-            className="px-5 py-2.5 rounded-xl bg-white border border-[#E5E5E5] text-[#737373] text-sm font-medium hover:border-[#8B5E3C] hover:text-[#171717] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            className="px-5 py-2.5 rounded-xl bg-white border border-[#E5E5E5] text-[#737373] text-sm font-medium hover:border-brand hover:text-[#171717] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           >
             ← Sebelumnya
           </button>
           <button
             onClick={handleNext}
             disabled={saving}
-            className="px-6 py-2.5 rounded-xl bg-[#8B5E3C] text-white text-sm font-semibold hover:bg-[#5C3A24] transition-colors disabled:opacity-50"
+            className="px-6 py-2.5 rounded-xl btn-brand text-sm font-semibold  transition-colors disabled:opacity-50"
           >
             {saving ? "Menyimpan..." : "Lanjut →"}
           </button>
