@@ -5,6 +5,7 @@ import bcrypt from "bcryptjs";
 import { adminClient } from "@/lib/sanity-admin";
 import { sendEmail, passwordResetEmailHtml, passwordResetEmailText, isEmailConfigured } from "@/lib/email";
 import { validatePassword } from "@/lib/validators";
+import { checkRateLimit, recordFailedAttempt } from "@/lib/rateLimit";
 
 const TOKEN_VALIDITY_MS = 30 * 60 * 1000;
 
@@ -20,13 +21,24 @@ async function runAction(fn) {
 export async function requestPasswordReset({ email }) {
   return runAction(async () => {
     if (!isEmailConfigured()) {
-      throw new Error("Email service belum dikonfigurasi. Hubungi pemilik website untuk setup RESEND_API_KEY.");
+      throw new Error("Email service belum dikonfigurasi. Hubungi pemilik website untuk setup BREVO_API_KEY.");
     }
 
     const normalizedEmail = String(email || "").trim().toLowerCase();
     if (!normalizedEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
       throw new Error("Email tidak valid");
     }
+
+    // Rate limit per email — prevent spam (max 5 requests per 15 min window)
+    const rateKey = `reset:${normalizedEmail}`;
+    const check = checkRateLimit(rateKey);
+    if (!check.allowed) {
+      const minutes = Math.ceil((check.remainingMs || 0) / 60000);
+      throw new Error(`Terlalu banyak permintaan reset. Coba lagi dalam ${minutes} menit.`);
+    }
+    // Record this attempt regardless of whether user exists
+    // (prevents enumeration AND throttles brute-force email spam)
+    recordFailedAttempt(rateKey);
 
     const user = await adminClient.fetch(
       `*[_type == "adminUser" && email == $email && isActive == true][0]{ _id, name, email }`,

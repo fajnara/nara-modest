@@ -2,6 +2,30 @@
 
 All notable changes to this template.
 
+## [1.0.0] — 2026-06 — Production-ready Release
+
+### Polish
+- Fixed stale `RESEND_API_KEY` wording → `BREVO_API_KEY` in error messages
+- `docs/vercel.md`: added complete env vars table (Sanity, NextAuth, Brevo, webhook)
+- `docs/vercel.md`: new Step 6 — Sanity webhook setup for instant revalidation
+- README: documented forgot password (4 ways) + per-customer instance setup
+- README: troubleshooting tip for Brevo email delivery
+
+### Added
+- "Lupa password?" link **conditionally rendered** — hidden if Brevo not configured
+- `/admin/forgot-password` server-redirects to login if Brevo not configured
+- Helpful message under password field when email service unavailable
+- **Rate limit on password reset request** — max 5 attempts per email per 15 min
+  - Prevents email spam abuse
+  - Reuses existing in-memory rate limiter
+
+### Changed
+- Refactored login page: server component now passes `emailEnabled` prop
+  - Created `components/admin/LoginForm.js` (extracted from page)
+- Refactored forgot-password page: server component for `isEmailConfigured` check
+  - Created `components/admin/ForgotPasswordForm.js`
+- **`package.json` version: 0.1.0 → 1.0.0** — project considered shippable
+
 ## [1.10.1] — 2026-06 — Switch Email Provider to Brevo
 
 ### Changed

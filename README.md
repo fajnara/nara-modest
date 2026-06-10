@@ -54,7 +54,7 @@ Buka [http://localhost:3000](http://localhost:3000) untuk website, dan [http://l
 - Badge "Baru" untuk produk featured
 
 **Untuk Pemilik Toko (Admin Panel):**
-- Login per-user dengan NextAuth
+- Login per-user dengan NextAuth + rate limit (anti brute-force)
 - **Setup Wizard** 5-step untuk onboarding
 - Dashboard dengan readiness checklist
 - CRUD produk, kategori, store settings
@@ -63,6 +63,12 @@ Buka [http://localhost:3000](http://localhost:3000) untuk website, dan [http://l
 - Color picker + live preview
 - Toggle availability cepat
 - Multi-admin user management
+
+**Password Recovery (4 cara):**
+- **Self-service via email** (Brevo) — admin klik "Lupa password?" → cek inbox → set password baru
+- **Self-service via /admin/account** — kalau masih bisa login
+- **Reset oleh superadmin lain** di `/admin/users`
+- **CLI fallback** — `npm run reset-password` untuk recovery emergency
 
 **Untuk Developer:**
 - Plain JavaScript (no TypeScript)
@@ -115,6 +121,29 @@ nara-modest/
 ├── scripts/                   # CLI scripts (seed, create-admin)
 └── docs/                      # Dokumentasi
 ```
+
+---
+
+## 👥 Per-Customer Setup (untuk jasa)
+
+Kalau kamu menjual template ini sebagai jasa, setiap klien butuh **instance terpisah**:
+
+| Resource | Per-klien? | Cara |
+|---|---|---|
+| Sanity project | ✅ | Buat baru di sanity.io/manage |
+| Vercel project | ✅ | Import repo (atau clone) |
+| `NEXTAUTH_SECRET` | ✅ | Generate baru per klien |
+| `SANITY_REVALIDATE_SECRET` | ✅ | Generate baru per klien |
+| Admin user | ✅ | `npm run create-admin` per instance |
+| Brevo sender | ✅ atau ⚠️ | Klien verify email sendiri, atau kamu setup |
+| Domain | ⚠️ | Klien beli sendiri, atau pakai subdomain Vercel |
+
+### Tips operasional
+
+- **Klien teknis** → kasih repo + docs, mereka deploy sendiri
+- **Klien non-teknis** → kamu deploy & maintain, charge monthly
+- **Brevo gratis 300 email/hari** sudah cukup untuk UMKM kecil (forgot password jarang dipakai)
+- **Tanpa Brevo** → "Lupa password?" link auto-hidden, klien recovery via superadmin/CLI
 
 ---
 
