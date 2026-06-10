@@ -39,6 +39,20 @@ export const adminUserSchema = {
       type: "boolean",
       initialValue: true,
     },
+    {
+      name: "resetTokenHash",
+      title: "Reset Token Hash",
+      type: "string",
+      description: "Auto-generated saat user request reset. Jangan edit manual.",
+      hidden: true,
+    },
+    {
+      name: "resetTokenExpires",
+      title: "Reset Token Expires",
+      type: "datetime",
+      description: "Auto-generated.",
+      hidden: true,
+    },
   ],
   preview: {
     select: { title: "name", subtitle: "email" },

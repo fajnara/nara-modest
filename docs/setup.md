@@ -165,17 +165,32 @@ npm run dev
 
 ## Lupa Password Admin
 
-Ada **3 cara** reset password:
+Ada **4 cara** reset password:
 
-### 1. Via Admin Panel (paling cepat — kalau ada superadmin lain)
+### 1. Via Email (self-service — RECOMMENDED)
 
-- Login sebagai superadmin lain → buka `/admin/users` → klik **Edit** di user yang lupa password → isi password baru → Simpan.
+Klik **"Lupa password?"** di halaman login → masukkan email → cek inbox → klik link → set password baru.
 
-### 2. Via Akun Saya (kalau masih bisa login)
+**Setup email service (sekali aja, owner template):**
+
+1. Daftar gratis di [resend.com](https://resend.com) (3000 email/bulan)
+2. Generate API key
+3. Tambah ke env (`.env.local` dan Vercel):
+   ```
+   RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxx
+   RESEND_FROM_EMAIL=Toko Kamu <onboarding@resend.dev>
+   ```
+4. Untuk production, verify domain di Resend lalu pakai email dari domain sendiri.
+
+### 2. Via Admin Panel (kalau ada superadmin lain)
+
+Login sebagai superadmin → `/admin/users` → klik **Edit** → isi password baru → Simpan.
+
+### 3. Via Akun Saya (kalau masih bisa login)
 
 Setelah login, buka `/admin/account` → masukkan password lama → set password baru.
 
-### 3. Via Terminal (kalau tidak ada akses admin panel)
+### 4. Via Terminal (last resort)
 
 ```bash
 # Windows PowerShell
@@ -185,7 +200,7 @@ $env:ADMIN_EMAIL="admin@toko.com"; $env:ADMIN_PASSWORD="passwordBaru123"; npm ru
 ADMIN_EMAIL=admin@toko.com ADMIN_PASSWORD="passwordBaru123" npm run reset-password
 ```
 
-Cocok untuk pemilik server / developer kalau **semua superadmin lupa password sekaligus**.
+Cocok untuk pemilik server kalau **semua superadmin lupa password sekaligus**.
 
 ---
 

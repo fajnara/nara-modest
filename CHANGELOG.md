@@ -2,6 +2,27 @@
 
 All notable changes to this template.
 
+## [1.10.0] — 2026-06 — Self-Service Email Password Reset
+
+### Added
+- **Email-based password reset** — fully self-service, no admin involvement
+  - `/admin/forgot-password` — user enters email → reset link sent
+  - `/admin/reset-password?token=...` — set new password via secure token
+  - Token: 32-byte cryptographic random, SHA-256 hashed in DB, 30-min expiry
+  - One-time use — token cleared after successful reset
+- **Resend integration** via native fetch (no SDK added)
+  - 3000 emails/month free tier
+  - Branded HTML email template (store name + primary color)
+  - Plain text fallback included
+- **adminUser schema**: new fields `resetTokenHash`, `resetTokenExpires` (hidden)
+- **Email enumeration prevention** — always return success regardless of email existence
+- Updated middleware + AdminLayout to allow `/admin/forgot-password` and
+  `/admin/reset-password` through without authentication
+
+### Env Variables
+- `RESEND_API_KEY` — your Resend API key
+- `RESEND_FROM_EMAIL` — sender address (e.g., `Toko <noreply@toko.com>`)
+
 ## [1.9.0] — 2026-06 — Password Recovery
 
 ### Added

@@ -9,8 +9,12 @@ export async function middleware(request) {
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set("x-pathname", pathname);
 
-  // Allow login page through (no auth required to see the form)
-  if (pathname.startsWith("/admin/login")) {
+  // Allow auth-related pages (login, forgot/reset password) through — no session needed
+  if (
+    pathname.startsWith("/admin/login") ||
+    pathname.startsWith("/admin/forgot-password") ||
+    pathname.startsWith("/admin/reset-password")
+  ) {
     return NextResponse.next({ request: { headers: requestHeaders } });
   }
 

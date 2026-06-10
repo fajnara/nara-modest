@@ -27,7 +27,11 @@ export default async function AdminLayout({ children }) {
   // Detect login path — must bypass auth & layout to avoid redirect loop
   const headersList = await headers();
   const pathname = headersList.get("x-pathname") || "";
-  const isLoginPage = pathname.startsWith("/admin/login");
+  // Pages that should render bare (no nav, no auth check)
+  const isPublicAuthPage =
+    pathname.startsWith("/admin/login") ||
+    pathname.startsWith("/admin/forgot-password") ||
+    pathname.startsWith("/admin/reset-password");
 
   // Fetch primary color for admin theming (lightweight — only color field)
   let primaryColor = "#8B5E3C";
@@ -40,8 +44,8 @@ export default async function AdminLayout({ children }) {
     // ignore — fallback
   }
 
-  // Login page — render bare with brand color, no nav, no auth check
-  if (isLoginPage) {
+  // Public auth pages — render bare with brand color, no nav, no auth check
+  if (isPublicAuthPage) {
     return (
       <BrandColorProvider primaryColor={primaryColor}>
         {children}
