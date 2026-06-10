@@ -2,6 +2,26 @@
 
 All notable changes to this template.
 
+## [1.10.1] — 2026-06 — Switch Email Provider to Brevo
+
+### Changed
+- Email service switched from Resend → Brevo (formerly Sendinblue)
+- **Why**: Brevo allows single-sender verification (Gmail OK), no domain needed
+  — more UMKM-friendly. Free tier 300 emails/day vs Resend's 3000/month.
+- New env vars: `BREVO_API_KEY`, `BREVO_FROM_EMAIL`, `BREVO_FROM_NAME`
+- `lib/email.js` uses Brevo REST API (still native fetch, no SDK)
+- All other reset password logic unchanged
+
+### Migration from 1.10.0
+Replace in `.env`:
+```
+- RESEND_API_KEY=...
+- RESEND_FROM_EMAIL=...
++ BREVO_API_KEY=xkeysib-xxx
++ BREVO_FROM_EMAIL=verified-email@gmail.com
++ BREVO_FROM_NAME=Nama Toko
+```
+
 ## [1.10.0] — 2026-06 — Self-Service Email Password Reset
 
 ### Added

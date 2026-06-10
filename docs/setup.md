@@ -173,14 +173,19 @@ Klik **"Lupa password?"** di halaman login → masukkan email → cek inbox → 
 
 **Setup email service (sekali aja, owner template):**
 
-1. Daftar gratis di [resend.com](https://resend.com) (3000 email/bulan)
-2. Generate API key
-3. Tambah ke env (`.env.local` dan Vercel):
+1. Daftar gratis di [brevo.com](https://brevo.com) — 300 email/hari (~9000/bulan)
+2. **Senders & IP** → **Senders** → **Add a sender**:
+   - Masukkan nama + email yang akan dipakai sebagai pengirim
+   - Email apapun OK (Gmail, Yahoo, dll. — **tidak perlu beli domain**)
+   - Cek inbox email itu → klik link verifikasi
+3. **SMTP & API** → **API Keys** → **Generate a new API key (v3)** → copy
+4. Tambah ke env (`.env.local` + Vercel):
    ```
-   RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxx
-   RESEND_FROM_EMAIL=Toko Kamu <onboarding@resend.dev>
+   BREVO_API_KEY=xkeysib-xxxxxxxxxxxxxxxx
+   BREVO_FROM_EMAIL=email-verified@gmail.com
+   BREVO_FROM_NAME=Nama Toko Kamu
    ```
-4. Untuk production, verify domain di Resend lalu pakai email dari domain sendiri.
+5. Restart dev server / redeploy Vercel
 
 ### 2. Via Admin Panel (kalau ada superadmin lain)
 
