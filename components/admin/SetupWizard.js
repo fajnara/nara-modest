@@ -46,15 +46,16 @@ export default function SetupWizard({ initialStore, initialCategoryCount, initia
   async function saveAndContinue() {
     setSaving(true);
     setError("");
-    try {
-      await updateStoreSettings(data);
-      setStep((s) => s + 1);
-      router.refresh();
-    } catch (err) {
-      setError(err.message || "Gagal menyimpan");
-    } finally {
-      setSaving(false);
+    const result = await updateStoreSettings(data);
+    setSaving(false);
+
+    if (result?.error) {
+      setError(result.error);
+      return;
     }
+
+    setStep((s) => s + 1);
+    router.refresh();
   }
 
   function validateStep() {

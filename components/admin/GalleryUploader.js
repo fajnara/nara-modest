@@ -29,22 +29,32 @@ export default function GalleryUploader({ value, onChange, label, max = 6 }) {
     setError("");
     setUploading(true);
 
-    try {
-      const newRefs = [];
-      for (const file of files) {
-        const formData = new FormData();
-        formData.append("file", file);
-        const ref = await uploadImage(formData);
-        // Each gallery item needs a unique key for Sanity arrays
-        newRefs.push({ ...ref, _key: crypto.randomUUID() });
+    const newRefs = [];
+    let uploadError = null;
+
+    for (const file of files) {
+      const formData = new FormData();
+      formData.append("file", file);
+      const result = await uploadImage(formData);
+
+      if (result?.error) {
+        uploadError = result.error;
+        break;
       }
-      onChange([...images, ...newRefs]);
-    } catch (err) {
-      setError(err.message || "Upload gagal");
-    } finally {
-      setUploading(false);
-      if (inputRef.current) inputRef.current.value = "";
+
+      // Each gallery item needs a unique key for Sanity arrays
+      newRefs.push({ ...result, _key: crypto.randomUUID() });
     }
+
+    if (newRefs.length > 0) {
+      onChange([...images, ...newRefs]);
+    }
+    if (uploadError) {
+      setError(uploadError);
+    }
+
+    setUploading(false);
+    if (inputRef.current) inputRef.current.value = "";
   }
 
   function handleRemove(index) {

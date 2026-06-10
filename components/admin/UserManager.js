@@ -20,14 +20,14 @@ export default function UserManager({ users, currentUserId }) {
     }
     setError("");
     startTransition(async () => {
-      try {
-        await createAdminUser(form);
-        setForm({ name: "", email: "", password: "", role: "admin" });
-        setShowAdd(false);
-        router.refresh();
-      } catch (err) {
-        setError(err.message);
+      const result = await createAdminUser(form);
+      if (result?.error) {
+        setError(result.error);
+        return;
       }
+      setForm({ name: "", email: "", password: "", role: "admin" });
+      setShowAdd(false);
+      router.refresh();
     });
   }
 
@@ -46,13 +46,13 @@ export default function UserManager({ users, currentUserId }) {
   function handleSave(id) {
     setError("");
     startTransition(async () => {
-      try {
-        await updateAdminUser(id, editForm);
-        setEditing(null);
-        router.refresh();
-      } catch (err) {
-        setError(err.message || "Gagal menyimpan perubahan");
+      const result = await updateAdminUser(id, editForm);
+      if (result?.error) {
+        setError(result.error);
+        return;
       }
+      setEditing(null);
+      router.refresh();
     });
   }
 
@@ -61,12 +61,12 @@ export default function UserManager({ users, currentUserId }) {
     if (id === currentUserId) { setError("Tidak bisa menghapus akun sendiri."); return; }
     if (!confirm("Hapus user ini?")) return;
     startTransition(async () => {
-      try {
-        await deleteAdminUser(id);
-        router.refresh();
-      } catch (err) {
-        setError(err.message || "Gagal menghapus user");
+      const result = await deleteAdminUser(id);
+      if (result?.error) {
+        setError(result.error);
+        return;
       }
+      router.refresh();
     });
   }
 

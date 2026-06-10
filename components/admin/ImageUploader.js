@@ -28,16 +28,18 @@ export default function ImageUploader({ value, onChange, label, aspectRatio = "s
     setError("");
     setUploading(true);
 
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
-      const ref = await uploadImage(formData);
-      onChange(ref);
-    } catch (err) {
-      setError(err.message || "Upload gagal");
-    } finally {
-      setUploading(false);
+    const formData = new FormData();
+    formData.append("file", file);
+    const result = await uploadImage(formData);
+    setUploading(false);
+
+    if (result?.error) {
+      setError(result.error);
+      return;
     }
+
+    // Result is the Sanity image ref { _type, asset }
+    onChange(result);
   }
 
   function handleDrop(e) {

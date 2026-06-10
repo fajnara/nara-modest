@@ -23,16 +23,16 @@ export default function AccountForm({ user }) {
     }
 
     startTransition(async () => {
-      try {
-        await updateOwnPassword({ currentPassword, newPassword });
-        setSuccess(true);
-        setCurrentPassword("");
-        setNewPassword("");
-        setConfirmPassword("");
-        setTimeout(() => setSuccess(false), 4000);
-      } catch (err) {
-        setError(err.message || "Gagal mengganti password");
+      const result = await updateOwnPassword({ currentPassword, newPassword });
+      if (result?.error) {
+        setError(result.error);
+        return;
       }
+      setSuccess(true);
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+      setTimeout(() => setSuccess(false), 4000);
     });
   }
 

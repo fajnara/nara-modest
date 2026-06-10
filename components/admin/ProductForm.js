@@ -49,18 +49,18 @@ export default function ProductForm({ product, categories, action }) {
       gallery: gallery,
     };
 
-    try {
-      if (product) {
-        await action(product._id, data);
-      } else {
-        await action(data);
-      }
-      router.push("/admin/products");
-      router.refresh();
-    } catch (err) {
-      setError(err.message || "Terjadi kesalahan");
+    const result = product
+      ? await action(product._id, data)
+      : await action(data);
+
+    if (result?.error) {
+      setError(result.error);
       setLoading(false);
+      return;
     }
+
+    router.push("/admin/products");
+    router.refresh();
   }
 
   return (

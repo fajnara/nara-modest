@@ -16,14 +16,15 @@ export default function ForgotPasswordPage() {
     setError("");
     setLoading(true);
 
-    try {
-      await requestPasswordReset({ email });
-      setSent(true);
-    } catch (err) {
-      setError(err.message || "Gagal mengirim email reset");
-    } finally {
-      setLoading(false);
+    const result = await requestPasswordReset({ email });
+    setLoading(false);
+
+    if (result?.error) {
+      setError(result.error);
+      return;
     }
+
+    setSent(true);
   }
 
   if (sent) {

@@ -46,16 +46,17 @@ export default function SettingsForm({ settings, action }) {
     data.logo = logo; // attach uploaded logo ref
     data.heroImage = heroImage; // attach uploaded hero image ref
 
-    try {
-      await action(data);
-      setSaved(true);
-      router.refresh();
-      setTimeout(() => setSaved(false), 3000);
-    } catch (err) {
-      setError(err.message || "Gagal menyimpan");
-    } finally {
-      setLoading(false);
+    const result = await action(data);
+    setLoading(false);
+
+    if (result?.error) {
+      setError(result.error);
+      return;
     }
+
+    setSaved(true);
+    router.refresh();
+    setTimeout(() => setSaved(false), 3000);
   }
 
   return (

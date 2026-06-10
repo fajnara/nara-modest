@@ -24,15 +24,16 @@ export default function ResetPasswordForm({ token, email }) {
     }
 
     setLoading(true);
-    try {
-      await resetPasswordWithToken({ token, email, newPassword });
-      setSuccess(true);
-      setTimeout(() => router.push("/admin/login"), 2500);
-    } catch (err) {
-      setError(err.message || "Gagal reset password");
-    } finally {
-      setLoading(false);
+    const result = await resetPasswordWithToken({ token, email, newPassword });
+    setLoading(false);
+
+    if (result?.error) {
+      setError(result.error);
+      return;
     }
+
+    setSuccess(true);
+    setTimeout(() => router.push("/admin/login"), 2500);
   }
 
   if (success) {

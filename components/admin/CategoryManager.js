@@ -20,13 +20,13 @@ export default function CategoryManager({ categories: initial }) {
     if (!newTitle.trim()) return;
     setError("");
     startTransition(async () => {
-      try {
-        await createCategory({ title: newTitle.trim(), order: newOrder || 99 });
-        setNewTitle(""); setNewOrder(""); setShowAdd(false);
-        router.refresh();
-      } catch (err) {
-        setError(err.message || "Gagal menambah kategori");
+      const result = await createCategory({ title: newTitle.trim(), order: newOrder || 99 });
+      if (result?.error) {
+        setError(result.error);
+        return;
       }
+      setNewTitle(""); setNewOrder(""); setShowAdd(false);
+      router.refresh();
     });
   }
 
@@ -41,13 +41,13 @@ export default function CategoryManager({ categories: initial }) {
     if (!editTitle.trim()) return;
     setError("");
     startTransition(async () => {
-      try {
-        await updateCategory(id, { title: editTitle.trim(), order: editOrder || 99 });
-        setEditing(null);
-        router.refresh();
-      } catch (err) {
-        setError(err.message || "Gagal menyimpan");
+      const result = await updateCategory(id, { title: editTitle.trim(), order: editOrder || 99 });
+      if (result?.error) {
+        setError(result.error);
+        return;
       }
+      setEditing(null);
+      router.refresh();
     });
   }
 
@@ -55,12 +55,12 @@ export default function CategoryManager({ categories: initial }) {
     if (!confirm("Hapus kategori ini? Produk yang terhubung tidak akan ikut terhapus.")) return;
     setError("");
     startTransition(async () => {
-      try {
-        await deleteCategory(id);
-        router.refresh();
-      } catch (err) {
-        setError(err.message || "Gagal menghapus");
+      const result = await deleteCategory(id);
+      if (result?.error) {
+        setError(result.error);
+        return;
       }
+      router.refresh();
     });
   }
 
